@@ -19,33 +19,16 @@ public class ArmOn extends CommandBase {
 int a;
 
     public ArmOn() {
-        requires (Rspike);
+        requires (armControl);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-            a = -1;
-            Rspike.On();
-
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-        
-        if(oi.checkButton(RobotMap.MC_B)==true){
-           a *= -1;
-        }
-        else if(oi.checkButton(RobotMap.MC_B)==false){
             
-        }
-        if(a==-1){
-            Rspike.forward();
-        }
-        else{
-            Rspike.reverse();
- }
     }
-
+    protected void execute() {
+        armControl.fall();
+    }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;
@@ -59,4 +42,5 @@ int a;
     // subsystems is scheduled to run
     protected void interrupted() {
     }
+
 }
