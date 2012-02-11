@@ -3,9 +3,12 @@ package team3929.commands;
 import team3929.subsystems.DriveSubsystems.Chassis;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import team3929.subsystems.Arm.ArmControl;
 import team3929.templates.OI.OI;
 import team3929.subsystems.ExampleSubsystem;
 import team3929.subsystems.Arm.Rspike;
+import team3929.subsystems.BallIntake.BallIntake;
+import team3929.subsystems.Shooter.Shooter;
 import team3929.templates.SensorsControl.RobotMap;
 
 /**
@@ -19,7 +22,9 @@ public abstract class CommandBase extends Command {
 
     public static OI oi;
     public static Chassis chassis = new Chassis();
-    public static Rspike Rspike = new Rspike(RobotMap.DRelay_armSpike);
+    public static ArmControl armControl = new ArmControl();
+    public static Shooter shooter = new Shooter();
+    public static BallIntake ballIntake = new BallIntake();
     // Create a single static instance of all of your subsystems
 
 

@@ -91,9 +91,10 @@ public class RobotMap {
     public static final int DIO_ballDetLightSensor2 = 6;
     public static final int DIO_ballDetLightSensor3 = 7;
 
-    public static final int DIO_shooterEncoder = 8;
+    public static final int DIO_shooterEncoderChannel1 = 8;
+    public static final int DIO_shooterEncoderChannel2 = 9;
 
-    public static final int DIO_shooterLimSwitch = 9;
+    public static final int DIO_shooterLimSwitch = 10;
 
     public static final int MC_A = 1;
     public static final int MC_B = 2;
