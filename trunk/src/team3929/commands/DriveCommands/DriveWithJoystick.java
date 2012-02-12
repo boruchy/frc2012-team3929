@@ -52,9 +52,7 @@ public class DriveWithJoystick extends CommandBase {
             
             JoyLeftY *= reverser;//multiplies joyY's by either -1, or 1
             JoyRightY *= reverser;
-            System.out.println(JoyLeftY);
-            System.out.println(JoyRightY);
-            System.out.println(ZValue);
+            
             }
         protected boolean isFinished() { // called repeatedly and determines if the
             

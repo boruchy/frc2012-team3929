@@ -4,7 +4,7 @@
  */
 package team3929.subsystems.BallIntake;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import team3929.commands.BallIntake.CheckBalls;
@@ -17,21 +17,43 @@ import team3929.templates.SensorsControl.RobotMap;
 public class BallIntake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
+
     Victor vic1 = new Victor(RobotMap.DPWM_ballInVictor1);
     Victor vic2 = new Victor(RobotMap.DPWM_ballInVictor2);
-    DigitalInput lsensor1 = new DigitalInput(RobotMap.DIO_ballDetLightSensor1);
-    DigitalInput lsensor2 = new DigitalInput(RobotMap.DIO_ballDetLightSensor2);
-    DigitalInput lsensor3 = new DigitalInput(RobotMap.DIO_ballDetLightSensor3);
+    AnalogChannel enterSensor = new AnalogChannel(RobotMap.DIO_ballDetLightSensor1);
+    AnalogChannel shooterSensor = new AnalogChannel(RobotMap.DIO_ballDetLightSensor2);
+    public int ballCounter = 0;
+
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         setDefaultCommand(new CheckBalls());
     }
-    public boolean checkBallSlot1(){
-        
-        return lsensor1.get();
 
+    public void checkEnterLightSensor() {
+
+
+        if (enterSensor.getValue() < 350) {
+            ballCounter++;
+                System.out.println("value: " + enterSensor.getValue());
+            /*if (vic1.getSpeed() >= 0) {
+                
+            }
+            else {
+                ballCounter--;
+            }
+             * 
+             */
+
+
+        } else {
+        }
     }
 
-    private void setDefaultCommand(BallIntake ballIntake) {
+    public void checkShooterSensor() {
+        if (shooterSensor.getValue() < 350) {
+            ballCounter--;
+            System.out.println("value: " + enterSensor.getValue());
+        } else {
+        }
     }
 }
