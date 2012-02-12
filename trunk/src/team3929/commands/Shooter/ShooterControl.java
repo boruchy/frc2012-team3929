@@ -4,16 +4,16 @@
  */
 package team3929.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Joystick;
 import team3929.commands.CommandBase;
-
 
 /**
  *
  * @author Carter
  */
-public class CheckAngle extends CommandBase {
+public class ShooterControl extends CommandBase {
 
-    public CheckAngle() {
+    public ShooterControl() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(shooter);
@@ -25,12 +25,13 @@ public class CheckAngle extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if(oi.checkButton(4)==true){
-            shooter.checkPotentiometer();
+        shooter.rotateTurret(oi.getAttackX());
+        shooter.changeAngle(oi.getAttackY());
+        if (oi.checkAttackButton(Joystick.ButtonType.kTop) == true) {
+            shooter.startWheel();
+        } else if (oi.checkAttackButton(Joystick.ButtonType.kTrigger) == true) {
+            shooter.stopWheel();
         }
- else if(oi.checkButton(3)==true){
-     
- }
     }
 
     // Make this return true when this Command no longer needs to run execute()
