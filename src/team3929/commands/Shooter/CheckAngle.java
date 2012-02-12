@@ -29,7 +29,7 @@ public class CheckAngle extends CommandBase {
             shooter.checkPotentiometer();
         }
  else if(oi.checkButton(3)==true){
-     System.out.println(shooter.checkLimit());
+     
  }
     }
 

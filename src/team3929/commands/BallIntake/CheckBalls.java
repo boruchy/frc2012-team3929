@@ -25,9 +25,10 @@ public class CheckBalls extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if(oi.checkButton(5)==true){
-            System.out.println(ballIntake.checkBallSlot1());
-        }
+        
+            ballIntake.checkEnterLightSensor();
+            ballIntake.checkShooterSensor();
+            System.out.println(ballIntake.ballCounter);
     }
 
     // Make this return true when this Command no longer needs to run execute()
