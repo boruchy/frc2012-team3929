@@ -20,21 +20,21 @@ import team3929.templates.HIDControl.MadCatzControl;
 
 public class Chassis extends Subsystem {
     
-    RobotDrive drive;
+    DriveTrain drive;
     private DriverStationLCD d=  DriverStationLCD.getInstance();
 
     public void initDefaultCommand() {
          setDefaultCommand(new DriveWithJoystick()); // set default command
     }
     public Chassis() {
-        drive = new RobotDrive(2, 1);
-        drive.setSafetyEnabled(false);
+        drive = new DriveTrain(2, 1);
+        
     }
     public void straight() { // sets the motor speeds to drive straight (no turn)
-        drive.arcadeDrive(.45, 0.0);
-    }
+    drive.tankDrive(.25,.25);
+}
     public void turnLeft() { // sets the motor speeds to start a left turn
-        drive.arcadeDrive(0.0, .45);
+        drive.tankDrive(0.0, .45);
     }
     public void driveWithJoystick(double stickLeft,double stickRight) {
         
