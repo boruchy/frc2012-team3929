@@ -1,0 +1,42 @@
+#summary FRC 2012 gives several different options for executing machine vision code for target selection.
+
+= Introduction =
+
+The programming sub team has been investigating the various methods by which we can perform machine vision tasks.  The goal is to have the robot identify the parameters necessary for a firing solution.  The turret will use this information to program it's z-axis rotation, hood elevation, and firing velocity.
+
+The vision whitepaper and Chief Delphi give several techniques, but they basically converge as follows:
+
+ #  grab a color image from the onboard Axis camera
+ #  create a binary image using a HSL filter
+ #  use convex hull algorithms to identify closed polygons
+ #  use a rectangularity score to identify the polygons that have a high likelihood of being the four retroreflective tape rectangles on the backboards
+ #  based on the skew of the polygons caused by perspective, calculate the distance and angle to the target in order to compute a firing solution.
+
+The processing steps can be accomplished in several ways
+
+ # on the cRio using LabView and the NI Vision Assistant
+ # on the cRio using Java and jna wrapped java functions that call the NI Vision C functions
+ # on the laptop using the WPI libraries
+ # on the laptop using Java and OpenCV
+
+= Laptop - Java - OpenCV =
+
+OpenCV is an Open-Source Computer Vision library.  It is written in C++, but a Google Code project ([http://code.google.com/p/javacv/]) wraps OpenCV c calls into Java.  Using these wrappers, we can call any OpenCV function and use it in our Java code.
+
+Steps for Use:
+ #  Install OpenCV for Windows (unpack the ZIP file to the root directory as its default)
+ #  Download the JavaCV jar files (copy and store them anywhere)
+ #  In NetBeans, create a new Library that points to javacpp.jar, javacv.jar, and javacv-windows-x86.jar
+ #  Create a new project, and set the Project -> Libraries preference to the new Library you created in the previous step.
+ #  In the project, you can import, for example
+
+{{{
+import com.googlecode.javacpp.Loader;
+import com.googlecode.javacv.*;
+import static com.googlecode.javacv.cpp.opencv_core.*;
+import static com.googlecode.javacv.cpp.opencv_imgproc.*;
+import static com.googlecode.javacv.cpp.opencv_calib3d.*;
+import static com.googlecode.javacv.cpp.opencv_objdetect.*;
+}}}
+
+*Note* The WPIImage class uses the opencv IplImage class as its backing store.  The backing store is protected but I saw the idea to write a WPIImage extension that does nothing more than return the IplImage when requested.  That means we can use opencv in our SmartDashboard extensions in the processImage method.
