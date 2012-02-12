@@ -9,7 +9,7 @@ The vision whitepaper and Chief Delphi give several techniques, but they basical
  #  grab a color image from the onboard Axis camera
  #  create a binary image using a HSL filter
  #  use convex hull algorithms to identify closed polygons
- #  use a rectangularity score to identify the polygons that have a high likelihood of being the four retroreflective tape rectangles on the backboards
+ #  use  scoring  (rectangularity and aspect ratio metrics) to identify the polygons that have a high likelihood of being the four retroreflective tape rectangles on the backboards
  #  based on the skew of the polygons caused by perspective, calculate the distance and angle to the target in order to compute a firing solution.
 
 The processing steps can be accomplished in several ways
@@ -40,3 +40,10 @@ import static com.googlecode.javacv.cpp.opencv_objdetect.*;
 }}}
 
 *Note* The WPIImage class uses the opencv IplImage class as its backing store.  The backing store is protected but I saw the idea to write a WPIImage extension that does nothing more than return the IplImage when requested.  That means we can use opencv in our SmartDashboard extensions in the processImage method.
+
+= cRIO - Java - WPI/NiVision libraries =
+The Team 399 code is based on the sample targeting code included with the NetBeans plugins.  It takes a ColorImage from the camera, uses a thresholdHSL to produce a BinaryImage.  The BinaryImage is then run through a convex hull, then filtered for particles that are too small.  Each remaining particle is then run through area, rectangularity and aspect ratio scoring.  The results are then presumed to be targets.
+
+*Libraries* The WPI classes, Image, ColorImage, and BinaryImage, use the NIVision c libraries wrapped through the WPI wrappers (NIVision.java).
+
+The results were encouraging so far.  In a single target test, the algorithm identified the center of the target within 3 pixels.  Distance was 98% accurate. Tests were conducted at angles from +-45 degrees off of orthogonal from the basket. After that, the results were mixed, and further tests will be required.
