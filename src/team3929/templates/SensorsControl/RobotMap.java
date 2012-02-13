@@ -63,11 +63,13 @@ public class RobotMap {
     public static final int DPWM_driveJag3 = 3;
     public static final int DPWM_driveJag4 = 4;
 
-    public static final int DPWM_shooterJag1 = 5;
-    public static final int DPWM_shooterJag2 = 6;
+    public static final int DPWM_shooterVic1 = 5;
+    public static final int DPWM_shooterVic2 = 6;
+    public static final int DPWM_shooterVic3 = 7;
+    public static final int DPWM_shooterVic4 = 8;
 
-    public static final int DPWM_ballInVictor1 = 7;
-    public static final int DPWM_ballInVictor2 = 8;
+    public static final int DPWM_ballInVictor1 = 9;
+    public static final int DPWM_ballInVictor2 = 10;
 
     //Digital relays have 1 Spike devoted to the arm, and 2 Spikes devoted to
     //the shooter

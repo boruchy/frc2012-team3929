@@ -28,9 +28,9 @@ public class ShooterControl extends CommandBase {
         shooter.rotateTurret(oi.getAttackX());
         shooter.changeAngle(oi.getAttackY());
         if (oi.checkAttackButton(Joystick.ButtonType.kTop) == true) {
-            shooter.startWheel();
+            shooter.startWheels();
         } else if (oi.checkAttackButton(Joystick.ButtonType.kTrigger) == true) {
-            shooter.stopWheel();
+            shooter.stopWheels();
         }
     }
 

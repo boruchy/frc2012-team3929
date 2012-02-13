@@ -18,8 +18,8 @@ public class BallIntake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    Victor vic1 = new Victor(RobotMap.DPWM_ballInVictor1);
-    Victor vic2 = new Victor(RobotMap.DPWM_ballInVictor2);
+    Victor frontConveyor = new Victor(RobotMap.DPWM_ballInVictor1);
+    Victor backConveyor = new Victor(RobotMap.DPWM_ballInVictor2);
     AnalogChannel enterSensor = new AnalogChannel(RobotMap.DIO_ballDetLightSensor1);
     AnalogChannel shooterSensor = new AnalogChannel(RobotMap.DIO_ballDetLightSensor2);
     public int ballCounter = 0;
@@ -29,30 +29,34 @@ public class BallIntake extends Subsystem {
         setDefaultCommand(new CheckBalls());
     }
 
+    public void turnOnConveyorBelts() {
+        frontConveyor.set(.5);
+        backConveyor.set(.5);
+    }
+
+    public void turnOffConveyorBelts() {
+        frontConveyor.set(0.0);
+        backConveyor.set(0.0);
+    }
+
     public void checkEnterLightSensor() {
 
 
-        if (enterSensor.getValue() < 350) {
-            ballCounter++;
-                System.out.println("value: " + enterSensor.getValue());
-            /*if (vic1.getSpeed() >= 0) {
-                
-            }
-            else {
+        if (enterSensor.getValue() <= 350) {
+            if (frontConveyor.getSpeed() > 0 && backConveyor.getSpeed() > 0) {
+                ballCounter++;
+                System.out.println("Enter value: " + enterSensor.getValue());
+            } else {
                 ballCounter--;
             }
-             * 
-             */
-
-
         } else {
         }
     }
 
     public void checkShooterSensor() {
-        if (shooterSensor.getValue() < 350) {
+        if (shooterSensor.getValue() <= 350) {
             ballCounter--;
-            System.out.println("value: " + enterSensor.getValue());
+            System.out.println("Shooter value: " + shooterSensor.getValue());
         } else {
         }
     }
