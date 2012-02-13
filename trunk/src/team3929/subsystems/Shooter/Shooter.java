@@ -17,12 +17,13 @@ public class Shooter extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    Jaguar jag1 = new Jaguar(RobotMap.DPWM_shooterJag1);
-    Jaguar jag2 = new Jaguar(RobotMap.DPWM_shooterJag2);
-    Victor vic1 = new Victor(9);
+    Victor rotater = new Victor(RobotMap.DPWM_shooterVic1);
+    Victor angleChanger = new Victor(RobotMap.DPWM_shooterVic2);
+    Victor shooterVictor1 = new Victor(RobotMap.DPWM_shooterVic3);
+    Victor shooterVictor2 = new Victor(RobotMap.DPWM_shooterVic4);
     Relay relay1 = new Relay(RobotMap.DRelay_shooterSpike1);
     Relay relay2 = new Relay(RobotMap.DRelay_shooterSpike2);
-    DigitalInput limSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);
+    DigitalInput limSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);//for the hood or turret to not go too far
     Encoder encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
     AnalogChannel potential = new AnalogChannel(RobotMap.A_Potential1);
 
@@ -32,19 +33,21 @@ public class Shooter extends Subsystem {
     }
 
     public void rotateTurret(double speed) {
-        jag1.set(speed);
+        rotater.set(speed);
     }
 
     public void changeAngle(double speed) {
-        jag1.set(speed);
+        angleChanger.set(speed);
     }
 
-    public void startWheel() {
-        jag2.set(0.5);
+    public void startWheels() {
+        shooterVictor1.set(0.5);
+        shooterVictor2.set(0.5);
     }
 
-    public void stopWheel() {
-        jag2.set(0.0);
+    public void stopWheels() {
+        shooterVictor1.set(0.0);
+        shooterVictor2.set(0.0);
     }
 
     public long checkPotentiometer() {

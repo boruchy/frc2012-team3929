@@ -6,7 +6,6 @@ package team3929.commands.BallIntake;
 
 import team3929.commands.CommandBase;
 
-
 /**
  *
  * @author Carter
@@ -25,10 +24,15 @@ public class CheckBalls extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        
-            ballIntake.checkEnterLightSensor();
-            ballIntake.checkShooterSensor();
-            System.out.println(ballIntake.ballCounter);
+        if (oi.checkButton(9) == true) {
+            ballIntake.turnOnConveyorBelts();
+        } else if (oi.checkButton(10) == true) {
+            ballIntake.turnOffConveyorBelts();
+        }
+        ballIntake.checkEnterLightSensor();
+        ballIntake.checkShooterSensor();
+        System.out.println(ballIntake.ballCounter);           // System.out.println(ballIntake.ballCounter);
+
     }
 
     // Make this return true when this Command no longer needs to run execute()

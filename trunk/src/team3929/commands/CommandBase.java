@@ -38,6 +38,10 @@ public abstract class CommandBase extends Command {
 
         // Show what command your subsystem is running on the SmartDashboard
         SmartDashboard.putData(chassis);
+        SmartDashboard.putData(ballIntake);
+        SmartDashboard.putData(shooter);
+        SmartDashboard.putData(armControl);
+
     }
 
     public CommandBase(String name) {
