@@ -9,8 +9,6 @@ package team3929.templates;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -18,10 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import team3929.commands.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.DriveCommands.DriveStraight;
-import team3929.commands.DriveCommands.DriveWithJoystick;
 import team3929.commands.DriveCommands.Turn;
-import team3929.subsystems.DriveSubsystems.Chassis;
-import team3929.subsystems.ExampleSubsystem;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the

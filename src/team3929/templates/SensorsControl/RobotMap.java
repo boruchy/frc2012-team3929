@@ -65,8 +65,8 @@ public class RobotMap {
 
     public static final int DPWM_shooterVic1 = 5;
     public static final int DPWM_shooterVic2 = 6;
-    public static final int DPWM_shooterVic3 = 7;
-    public static final int DPWM_shooterVic4 = 8;
+    public static final int DPWM_shooterJag3 = 7;
+    public static final int DPWM_shooterJag4 = 8;
 
     public static final int DPWM_ballInVictor1 = 9;
     public static final int DPWM_ballInVictor2 = 10;
