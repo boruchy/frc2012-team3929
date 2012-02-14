@@ -4,7 +4,7 @@
  */
 package team3929.subsystems.Shooter;
 
-import edu.wpi.first.wpilibj.*;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import team3929.templates.SensorsControl.RobotMap;
 import team3929.commands.Shooter.ShooterControl;
