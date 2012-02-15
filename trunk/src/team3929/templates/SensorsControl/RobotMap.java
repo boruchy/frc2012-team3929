@@ -83,25 +83,34 @@ public class RobotMap {
     //the arm, 3 Light Sensors devoted to Ball Detection, 1 Encoder devoted to
     //the shooter, and 1 Limit Switch devoted to the shooter.
 
-    public static final int DIO_driveEncoder1 = 1;
-    public static final int DIO_driveEncoder2 = 2;
+    public static final int DIO_driveEncoder1Channel1 = 1;
+    public static final int DIO_driveEncoder2Channel1 = 2;
+    public static final int DIO_driveEncoder1Channel2 = 3;
+    public static final int DIO_driveEncoder2Channel2 = 4;
 
-    public static final int DIO_armLimSwitch1 = 3;
-    public static final int DIO_armLimSwitch2 = 4;
 
-    public static final int DIO_ballDetLightSensor1 = 5;
-    public static final int DIO_ballDetLightSensor2 = 6;
-    public static final int DIO_ballDetLightSensor3 = 7;
+    public static final int DIO_armLimSwitch1 = 5;
+    public static final int DIO_armLimSwitch2 = 6;
 
-    public static final int DIO_shooterEncoderChannel1 = 8;
-    public static final int DIO_shooterEncoderChannel2 = 9;
+    public static final int DIO_ballDetLightSensor1 = 7;
+    public static final int DIO_ballDetLightSensor2 = 8;
+    public static final int DIO_ballDetLightSensor3 = 9;
 
-    public static final int DIO_shooterLimSwitch = 10;
+    public static final int DIO_shooterEncoderChannel1 = 10;
+    public static final int DIO_shooterEncoderChannel2 = 11;
+
+    public static final int DIO_shooterLimSwitch = 12;
 
     public static final int MC_A = 1;
     public static final int MC_B = 2;
     public static final int MC_Y = 3;
     public static final int MC_X = 4;
-    
+    public static final int MC_LB = 5;
+    public static final int MC_RB = 6;
+    public static final int MC_leftJoy = 7;
+    public static final int MC_rightJoy = 8;
+    public static final int MC_select = 9;
+    public static final int MC_start = 10;
+
 
 }

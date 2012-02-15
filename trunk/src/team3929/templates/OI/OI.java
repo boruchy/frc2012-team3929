@@ -8,9 +8,9 @@ import team3929.templates.HIDControl.MadCatzControl;
 
 public class OI {
 
-    public static final int JOYSTICK_PORT = 1;
+    public static final int JOYSTICK_PORT = 1;//ports for different controllers
     public static final int ATTACK3_PORT = 2;
-    private MadCatzControl madcatz;
+    private MadCatzControl madcatz;//declare madcatz controller, and a new atack3
     private Joystick attack3;
 
     public OI() {
@@ -26,7 +26,8 @@ public class OI {
 
     }
 
-    public double getTriggerValue() {
+    public double getTriggerValue() {//returns madcatz z axis
+        //note that leftTrigger pushes z axi down, as right accomplishes the contrary
         return getJoystick().getTrigger();
     }
 
@@ -38,15 +39,15 @@ public class OI {
         return getJoystick().getRightY();
     }
 
-    public double getAttackY() {
+    public double getAttackY() {//return attack3 joystick y axis
         return getAttack().getY();
     }
 
-    public double getAttackX() {
+    public double getAttackX() {//return attack3 joystick x axis 
         return getAttack().getX();
     }
 
-    public boolean checkAttackButton(ButtonType button) {
+    public boolean checkAttackButton(ButtonType button) {//check if a button is pressed
         return getAttack().getButton(button);
     }
 
@@ -55,7 +56,7 @@ public class OI {
         return madcatz;
     }
 
-    public Joystick getAttack() {
+    public Joystick getAttack() {//returns attack joystick
         return attack3;
     }
     //public Joystick getRightJoystick() { //Returns a joystick
