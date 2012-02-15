@@ -19,7 +19,7 @@ public class ArmOn extends CommandBase {
 int a;
 
     public ArmOn() {
-        requires (armControl);
+        requires (armControl); //needs the armControl subsystem
     }
 
     // Called just before this Command runs the first time
@@ -28,11 +28,11 @@ int a;
     }
     protected void execute() {
         
-        armControl.fall();
+        armControl.fall(); //executes the fall method in armControl
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return false; //never returns false
     }
 
     // Called once after isFinished returns true
