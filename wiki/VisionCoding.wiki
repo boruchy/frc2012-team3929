@@ -44,6 +44,6 @@ import static com.googlecode.javacv.cpp.opencv_objdetect.*;
 = cRIO - Java - WPI/NiVision libraries =
 The Team 399 code is based on the sample targeting code included with the NetBeans plugins.  It takes a ColorImage from the camera, uses a thresholdHSL to produce a BinaryImage.  The BinaryImage is then run through a convex hull, then filtered for particles that are too small.  Each remaining particle is then run through area, rectangularity and aspect ratio scoring.  The results are then presumed to be targets.
 
-*Libraries* The WPI classes, Image, ColorImage, and BinaryImage, use the NIVision c libraries wrapped through the WPI wrappers (NIVision.java).
+*Libraries* The WPI classes, Image, ColorImage, and BinaryImage, use the NIVision c libraries wrapped through the WPI wrappers (NIVision.java).  Image and ColorImage are abstract.  Trying to instantiate an HSLImage or RGBImage (concrete subclasses of ColorImage) results in a lovely stack trace.  Error is the <code>java.lang.ClassCastException: java.lang.String cannot be cast to com.sun.squawk.Address</code>.  I think that it can only be run on the squawk jvm on the crio.
 
 The results were encouraging so far.  In a single target test, the algorithm identified the center of the target within 3 pixels.  Distance was 98% accurate. Tests were conducted at angles from +-45 degrees off of orthogonal from the basket. After that, the results were mixed, and further tests will be required.
