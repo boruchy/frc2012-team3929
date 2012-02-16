@@ -5,6 +5,11 @@
 package team3929.subsystems.Shooter;
 
 
+import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import team3929.templates.SensorsControl.RobotMap;
 import team3929.commands.Shooter.ManualShooterControl;
