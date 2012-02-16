@@ -50,6 +50,7 @@ public class BallIntake extends Subsystem {
             else {
                 ballCounter--; //if the Victors are going backward and the light sensor sees it, subtract one from ballCounter
             }
+        }
         else{
         
         }
