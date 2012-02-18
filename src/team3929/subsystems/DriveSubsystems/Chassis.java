@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.DriveCommands.DriveWithJoystick;
 import team3929.templates.HIDControl.MadCatzControl;
 import team3929.templates.SensorsControl.RobotMap;
+import team3929.subsystems.DriveSubsystems
 /**
  *
  * @author Carter
@@ -23,7 +24,7 @@ import team3929.templates.SensorsControl.RobotMap;
 public class Chassis extends Subsystem {
     
     
-    RobotDrive drive = new RobotDrive(2,1);//instantiate RobotDrive on ports 2,1 for left and right motors
+    DriveTrain drive = new DriveTrain(2,1,4,3);//instantiate RobotDrive on ports 2,1,4,3 for left and right motors
     Encoder leftEncoder = new Encoder(RobotMap.DIO_driveEncoder1Channel1,RobotMap.DIO_driveEncoder1Channel2,false);
     Encoder rightEncoder = new Encoder(RobotMap.DIO_driveEncoder2Channel1,RobotMap.DIO_driveEncoder2Channel2,false);
     //create the left and right corresponding encoders that are counting rotations 
