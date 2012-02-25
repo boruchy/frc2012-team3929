@@ -4,9 +4,10 @@
  */
 package team3929.commands.DriveCommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.CommandBase;
 import team3929.templates.SensorsControl.RobotMap;
-
+import edu.wpi.first.wpilibj.RobotDrive;
 /**
  *
  * @author Carter
@@ -21,23 +22,18 @@ public class DriveWithJoystick extends CommandBase {
     }
         protected void initialize() { // called once each time the command starts running
             
-     JoyLeftY = oi.getLeftY();//initialize the joysticks by grabbing their info from OI
-     JoyRightY = oi.getRightY();
+        
      
         }
         protected void execute() { // called repeatedly while the command is running
-            chassis.driveWithJoystick(JoyLeftY,JoyRightY);
             
-            JoyLeftY = oi.getLeftY();//These are continuously called so that they can wait for changes.
+            JoyLeftY = -oi.getLeftY();
             JoyRightY = oi.getRightY();
-            
-            
-                if(oi.checkButton(RobotMap.MC_A) == true){//boolean for is button is pressed
-                    reverser *= -1; //make reverser the opposite of what it was priorly
-                }
-            
-            JoyLeftY *= reverser;//multiplies joyY's by either -1, or 1
-            JoyRightY *= reverser;
+            //JoyLeftY = -oi.getAttackSecondaryY();//These are continuously called so that they can wait for changes.
+            //JoyRightY = oi.getAttackY();
+            chassis.driveWithJoystick(JoyLeftY,JoyRightY);
+            SmartDashboard.putDouble("Left Joystick: ", JoyLeftY);
+            SmartDashboard.putDouble("Right Joystick: ", JoyRightY);
             
             }
         protected boolean isFinished() { // called repeatedly and determines if the

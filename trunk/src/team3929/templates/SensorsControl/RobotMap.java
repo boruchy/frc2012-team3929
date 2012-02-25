@@ -63,13 +63,13 @@ public class RobotMap {
     public static final int DPWM_driveJag3 = 3;
     public static final int DPWM_driveJag4 = 4;
 
-    public static final int DPWM_shooterVic1 = 5;
-    public static final int DPWM_shooterVic2 = 6;
-    public static final int DPWM_shooterJag3 = 7;
-    public static final int DPWM_shooterJag4 = 8;
-
-    public static final int DPWM_ballInVictor1 = 9;
-    public static final int DPWM_ballInVictor2 = 10;
+    public static final int DPWM_ballInVictor1 = 5;
+    public static final int DPWM_ballInVictor2 = 6;
+    public static final int DPWM_shooterJag3 = 9;
+    public static final int DPWM_shooterJag4 = 10;
+    public static final int DPWM_shooterVic1 = 7;
+    public static final int DPWM_shooterVic2 = 8;
+    
 
     //Digital relays have 1 Spike devoted to the arm, and 2 Spikes devoted to
     //the shooter
@@ -92,9 +92,8 @@ public class RobotMap {
     public static final int DIO_armLimSwitch1 = 5;
     public static final int DIO_armLimSwitch2 = 6;
 
-    public static final int DIO_ballDetLightSensor1 = 7;
-    public static final int DIO_ballDetLightSensor2 = 8;
-    public static final int DIO_ballDetLightSensor3 = 9;
+    public static final int A_ballDetLightSensor1 = 3;
+    public static final int A_ballDetLightSensor2 = 4;
 
     public static final int DIO_shooterEncoderChannel1 = 10;
     public static final int DIO_shooterEncoderChannel2 = 11;
@@ -103,8 +102,8 @@ public class RobotMap {
 
     public static final int MC_A = 1;
     public static final int MC_B = 2;
-    public static final int MC_Y = 3;
-    public static final int MC_X = 4;
+    public static final int MC_Y = 4;
+    public static final int MC_X = 3;
     public static final int MC_LB = 5;
     public static final int MC_RB = 6;
     public static final int MC_leftJoy = 7;
@@ -112,5 +111,21 @@ public class RobotMap {
     public static final int MC_select = 9;
     public static final int MC_start = 10;
 
+    //Vision Stuff
+    public static final double areaThresh = 444;
+    public static final double rectThresh = 70;
+    public static final double aspectThresh = 0;
+    public static final int cameraHeight = 240;
+    public static final int cameraWidth = 320;
+    public static final double cameraOnTurretHeight = 3.25;
+
+    public static final int lowHThresh = 0;
+    public static final int highHThresh = 255;
+    public static final int lowSThresh = 100;
+    public static final int highSThresh = 255;
+    public static final int lowLThresh = 135;
+    public static final int highLThresh = 255;
+
+    public static String TEAM_PREFIX_VISION = "[TEAM 3929 VISION] ";
 
 }
