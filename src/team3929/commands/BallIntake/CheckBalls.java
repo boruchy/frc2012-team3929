@@ -4,7 +4,10 @@
  */
 package team3929.commands.BallIntake;
 
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.CommandBase;
+import team3929.templates.SensorsControl.RobotMap;
 
 /**
  *
@@ -24,14 +27,22 @@ public class CheckBalls extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (oi.checkButton(9) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
-            ballIntake.turnOnConveyorBelts();//then uses the turnOnConveyorBelts method from ballIntake
-        } else if (oi.checkButton(10) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
-            ballIntake.turnOffConveyorBelts();//then turn off the conveyor belts
+        if (oi.checkButton(RobotMap.MC_LB) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
+            ballIntake.turnOnHorizontalConveyor();//then uses the turnOnConveyorBelts method from ballIntake
+        } else if (oi.checkButton(RobotMap.MC_RB) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
+            ballIntake.reverseHorizontalConveyor();//then turn off the conveyor belts
+        } else if (oi.checkButton(RobotMap.MC_X) == true){
+            ballIntake.reverseHorizontalConveyor();
+        }
+        if(oi.checkAttackRealButton(ButtonType.kTrigger)){
+            ballIntake.turnOnVerticalConveyor();
+        }
+        else{
+            ballIntake.turnOffVerticalConveyor();
         }
         ballIntake.checkEnterLightSensor(); //calls the method to check theentrance light sensor
         ballIntake.checkShooterSensor();//calls the method to check the shooter light sensor
-        System.out.println(ballIntake.ballCounter);//Prints out the value for the ballCounter int in ballIntake class
+        SmartDashboard.putInt("Ball Counter:", ballIntake.ballCounter);//Prints out the value for the ballCounter int in ballIntake class
 
     }
 

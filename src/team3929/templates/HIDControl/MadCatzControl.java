@@ -16,7 +16,7 @@ public class MadCatzControl {
 
     /**
      * Contructor.
-     * @param port The USB port the gamepad is connected to
+     * @param port The USB the gamepad is connected to
      */
     public MadCatzControl(int port) {
         m_Pad = new Joystick(port);     //Instantiate the gamepad on port 1

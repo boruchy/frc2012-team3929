@@ -28,7 +28,7 @@ int a;
     }
     protected void execute() {
         
-        armControl.fall(); //executes the fall method in armControl
+        //armControl.fall(); //executes the fall method in armControl
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

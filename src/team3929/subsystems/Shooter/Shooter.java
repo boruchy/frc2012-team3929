@@ -24,8 +24,7 @@ public class Shooter extends Subsystem {
 //Most of these require just a port number for instantiation.  For this, we created robotmap which is where ports are being called from
     Victor rotater = new Victor(RobotMap.DPWM_shooterVic1);//declaration and instantiation of sensors and speed controllers
     Victor angleChanger = new Victor(RobotMap.DPWM_shooterVic2);
-    Jaguar shooterJaguar1 = new Jaguar(RobotMap.DPWM_shooterJag3);
-    Jaguar shooterJaguar2 = new Jaguar(RobotMap.DPWM_shooterJag4);
+    Jaguar shooterJaguar = new Jaguar(RobotMap.DPWM_shooterJag3);
     DigitalInput limSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);//for the hood or turret to not go too far
     Encoder encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
     //this requires two channels(one for forward an one for back)--an encoder will count turns of the motor and gives speed.
@@ -49,13 +48,11 @@ public class Shooter extends Subsystem {
     }
 
     public void startWheels() {//starts wheels that the shooter will use
-        shooterJaguar1.set(0.5);
-        shooterJaguar2.set(0.5);
+        shooterJaguar.set(0.75);
     }
 
     public void stopWheels() {//stops shooting wheels
-        shooterJaguar1.set(0.0);
-        shooterJaguar2.set(0.0);
+        shooterJaguar.set(0.0);
     }
 
     public long checkAnglePotentiometer() {//checks potentiometer of the hood which can get the angle of the hood
