@@ -1,5 +1,7 @@
 #summary FRC 2012 gives several different options for executing machine vision code for target selection.
 
+<wiki:toc max_depth="3" />
+
 = Introduction =
 
 The programming sub team has been investigating the various methods by which we can perform machine vision tasks.  The goal is to have the robot identify the parameters necessary for a firing solution.  The turret will use this information to program it's z-axis rotation, hood elevation, and firing velocity.
@@ -40,6 +42,24 @@ import static com.googlecode.javacv.cpp.opencv_objdetect.*;
 }}}
 
 *Note* The WPIImage class uses the opencv IplImage class as its backing store.  The backing store is protected but I saw the idea to write a WPIImage extension that does nothing more than return the IplImage when requested.  That means we can use opencv in our SmartDashboard extensions in the processImage method.
+
+==Daisy Code Analysis==
+Team 341 have posted their 2012 code for DaisyBot.  They have been extremely generous, and the code is incredibly instructive for us.  341's vision subsystem uses two interlocking components: first, it has a WPICameraExtension that runs on the SmartDashboard and does all the vision processing on the laptop, sending a firing solution (a flag, the azimuth, and the RPMs for the shooter) to the robot via the NetworkTable; second, it has a system of drive- and shootercontrollers that process the targeting information and adjust the robot's angle and shooter's rpm accordingly.  DaisyBot uses the drivetrain for aiming on the z-axis, and has a fixed angle shooter.  They adjust the RPM of their shooter motor to select the shot velocity appropriate for the range, as specified in a lookup table in the WPICameraExtension.  They also use a navigation system to track Daisy's trajectory (storing position, velocity, and acceleration).
+
+In teleop mode, they use teleopPeriodic (no teleopContinuous override) to poll and process driver inputs via the OI file's processDriverInputs() method.  The driver has four states:  manual, shifting, autoaim, and autobalance.  
+
+===autoaim mode===
+The driver enters autoaim mode by holding the left trigger.  The drive changes its controller to the AutoAimDriveController, and the shooter changes to AutoAimShooterController.  The light on the shooter is set to ON if both the drive and shooter report that they are on target.  (On target means different things depending on the subsystem:  for the drive, it means that it has adjusted the robot's angle so that the shooter is facing the target; for the shooter, it means that the ShooterSpeedController has gotten the shooter up to the target RPM level, as read off the lookup table in the DaisyCVWidget.)
+Once the light is on, the driver can shoot by pressing the A button.
+
+The *AutoAimDriveController* class polls the Vision subsystem (a state wrapper that polls the NetworkTable for the keys "found," "azimuth," and "rpms.") for the current target azimuth.  It then calls the TurnController's run method, which shifts into low gear and starts the process of calculating (through its FeedForwardPIV) the adjustments necessary to head towards the target azimuth (via the driveSpeedTurn method). 
+
+In our case, we use the Turret to change azimuth, but the process will be much the same.
+
+The *AutoAimShooterController* class also polls the Vision subsystem for the target RPM level, and calls the shooter's run() method to advance toward the target RPM level.  Our system does much the same.
+
+We currently have a hood that is variable in about 60 degrees (from -60 to straight), has a window motor, and is controlled with a Victor.  Given that the firing solution can be determined using only azimuth and velocity (but with a limited range therefore), we are contemplating setting two stops on the hood, and generating two firing lookup tables -- a long range and a short range. 
+
 
 = cRIO - Java - WPI/NiVision libraries =
 The Team 399 code is based on the sample targeting code included with the NetBeans plugins.  It takes a ColorImage from the camera, uses a thresholdHSL to produce a BinaryImage.  The BinaryImage is then run through a convex hull, then filtered for particles that are too small.  Each remaining particle is then run through area, rectangularity and aspect ratio scoring.  The results are then presumed to be targets.
