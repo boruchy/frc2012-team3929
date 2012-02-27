@@ -60,6 +60,16 @@ The *AutoAimShooterController* class also polls the Vision subsystem for the tar
 
 We currently have a hood that is variable in about 60 degrees (from -60 to straight), has a window motor, and is controlled with a Victor.  Given that the firing solution can be determined using only azimuth and velocity (but with a limited range therefore), we are contemplating setting two stops on the hood, and generating two firing lookup tables -- a long range and a short range. 
 
+===Image Processing===
+The WPICameraExension takes care of the heavy processing on the laptop side using opencv and the java wrappers described above.  The overridden processImage method runs as follows:
+
+ # convert WPIColorImage to an IplImage, then to HSV
+ # threshold each H-S-V component separately, then AND them back together into a BinaryImage
+ # fill in gaps, then perform the convex hull using opencv_imgproc.cvFindContours bridged method
+ # loop through the contours, looking for convex polygons that match aspect ratio and raw size tests
+ # test each polygon to find a "square" -- tests each polygon to check whether it has two "nearly" vertical and at least 1 "nearly" horizontal edges
+ # the square is the target -> find the center of mass, and use that to find azimuth (offset from center point) and range
+ # put the information onto the Robot's networktable
 
 = cRIO - Java - WPI/NiVision libraries =
 The Team 399 code is based on the sample targeting code included with the NetBeans plugins.  It takes a ColorImage from the camera, uses a thresholdHSL to produce a BinaryImage.  The BinaryImage is then run through a convex hull, then filtered for particles that are too small.  Each remaining particle is then run through area, rectangularity and aspect ratio scoring.  The results are then presumed to be targets.
