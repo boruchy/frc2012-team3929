@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import java.util.Vector;
-import team3929.templates.SensorsControl.RobotMap;
+import team3929.templates.RobotMap;
 
 
 public class ImageTracker {
