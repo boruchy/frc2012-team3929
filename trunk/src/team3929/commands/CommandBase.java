@@ -1,15 +1,14 @@
 package team3929.commands;
 
-import team3929.subsystems.DriveSubsystems.Chassis;
+import team3929.subsystems.Chassis;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import team3929.subsystems.Arm.ArmControl;
-import team3929.templates.OI.OI;
+import team3929.subsystems.ArmControl;
+import team3929.templates.OI;
 import team3929.subsystems.ExampleSubsystem;
-import team3929.subsystems.Arm.Rspike;
-import team3929.subsystems.BallIntake.BallIntake;
-import team3929.subsystems.Shooter.Shooter;
-import team3929.templates.SensorsControl.RobotMap;
+import team3929.subsystems.BallIntake;
+import team3929.subsystems.Shooter;
+import team3929.templates.RobotMap;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.

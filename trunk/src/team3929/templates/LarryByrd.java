@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import team3929.commands.CommandBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.DriveCommands.DriveStraight;
+import team3929.commands.DriveCommands.LockDrivetrain;
 import team3929.commands.DriveCommands.Turn;
 
 
@@ -43,6 +44,8 @@ public class LarryByrd extends IterativeRobot {
         autoChooser = new SendableChooser();
         autoChooser.addDefault("Turn", new Turn(4));
         autoChooser.addObject("Drive Straight", new DriveStraight(4));
+        autoChooser.addObject("Lock drivetrain", new LockDrivetrain());
+        autoChooser.addObject("Unlock drivetrain", new UnlockDriveTrain());
         SmartDashboard.putData("autoChooser", autoChooser);
         SmartDashboard.putData("Scheduler", Scheduler.getInstance());
         

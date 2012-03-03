@@ -6,7 +6,7 @@ package team3929.commands.DriveCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.CommandBase;
-import team3929.templates.SensorsControl.RobotMap;
+import team3929.templates.RobotMap;
 import edu.wpi.first.wpilibj.RobotDrive;
 /**
  *
