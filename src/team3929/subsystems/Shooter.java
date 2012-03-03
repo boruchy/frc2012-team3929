@@ -99,6 +99,11 @@ public class Shooter extends Subsystem {
         return 0;
     }
 
+    // Joystick is [-1..1]
+    public void rotateTurretToAngleByJoystick(double d) {
+        this.rotateTurretToAngle((int)(d + 1 * 2.5));
+    }
+
      public long checkAnglePotentiometer() {//checks potentiometer of the hood which can get the angle of the hood
         long value = 0;
         // value = hoodAnglePot.getAccumulatorValue();
@@ -146,7 +151,6 @@ public class Shooter extends Subsystem {
     public void changeAngle(double speed) {
         hoodAngleMotor.set(speed);
     }
-
 //    //checks if limit switch is pressed
 //    public boolean checkLimit() {
 //        return hoodSafetyLimitSwitch.get();
