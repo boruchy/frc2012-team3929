@@ -1,72 +1,154 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * The class represents the shooter, hood and the turret subsystems.
  */
 package team3929.subsystems;
-
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import team3929.templates.RobotMap;
 import team3929.commands.ManualShooterControl;
+import team3929.templates.RobotMap;
 
 /**
  *
- * @author Carter
+ * @author Carter Henderson
+ * @author Brent Gray
+ * @version 2012-03-03-1308
  */
 public class Shooter extends Subsystem {
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-//Most of these require just a port number for instantiation.  For this, we created robotmap which is where ports are being called from
-    Victor rotater = new Victor(RobotMap.DPWM_shooterVic1);//declaration and instantiation of sensors and speed controllers
-    Victor angleChanger = new Victor(RobotMap.DPWM_shooterVic2);
-    Jaguar shooterJaguar = new Jaguar(RobotMap.DPWM_shooterJag3);
-    DigitalInput limSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);//for the hood or turret to not go too far
-    Encoder encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
-    //this requires two channels(one for forward an one for back)--an encoder will count turns of the motor and gives speed.
-    AnalogChannel potentialAngle = new AnalogChannel(RobotMap.A_Potential1);
-    AnalogChannel potentialRotater = new AnalogChannel(RobotMap.A_Potential2);
-    //we instantiate potentiometers because we need one for the angle of the hood, and one for the rotation of the turret
-    /*
-     * by the way, AnalogChannels(variable output), are used for potentiometers and lightsensors, and digitalinput is used for limitswitch(boolean output)
-     */
+
+    /***********************  SHOOTER SUBSYSTEM *********************** */
+    // the shooter has two Jags being controlled off one PWM
+    // therefore this Jaguar acutally represents both
+    Jaguar shooterMotors;
+    // RPM encoder for the shooter -- NOT INCLUDED ON THE BOT CURRENTLY
+    //Encoder encoder;
+
+    /***********************  HOOD SUBSYSTEM *********************** */
+    // safety for hood.
+    // TODO:  is this necessary?  there might be mechanical stops at this point.
+    //DigitalInput hoodSafetyLimitSwitch;
+    Victor hoodAngleMotor;
+    // POT IS NOT CURRENTLY INSTALLED ON HOOD
+    // AnalogChannel hoodAnglePot;
+
+    /***********************  TURRET SUBSYSTEM *********************** */
+    AnalogChannel turretRotationPot;
+    Victor turretRotationMotor;
+    PIDController turretRotationController;
+    // mechanical zero on the pot will be set to 90 degrees left
+    // driving coordinate system will be 0 straight ahead, -90 for LEFT;
+    // +90 for RIGHT
+    int potMechanicalOffset = 90;
+    public static Shooter instance = null;
+
+    private Shooter() {
+        turretRotationMotor = new Victor(RobotMap.DPWM_shooterVic1);
+        hoodAngleMotor = new Victor(RobotMap.DPWM_shooterVic2);
+        shooterMotors = new Jaguar(RobotMap.DPWM_shooterJag3);
+        // hoodSafetyLimitSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);
+        //encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
+        // hoodAnglePot = new AnalogChannel(RobotMap.A_Potential1);
+        turretRotationPot = new AnalogChannel(RobotMap.A_Potential2);
+        turretRotationController = new PIDController(0.1, 0.001, 0.0, turretRotationPot, turretRotationMotor);
+    }
+
+    public static Shooter getInstance() {
+        if (instance == null) {
+            instance = new Shooter();
+        }
+        return instance;
+    }
+
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         setDefaultCommand(new ManualShooterControl());
     }
 
-    public void rotateTurret(double speed) {//will allow turret to be rotate t a value
-        rotater.set(speed);
+    /*********************** TURRET SUBSYSTEM METHODS *********************** */
+
+
+    // mechanical angle on the pot is 0 (90 degrees LEFT) to 180 (90 degrees RIGHT)
+    // input is in the drivetrain coordinate system (0 is straight ahead)
+    public void rotateTurretToAngle(int angle) {
+        turretRotationController.setSetpoint(convertDriverAngleToPotAngle(angle));
     }
 
-    public void changeAngle(double speed) {//changes hood angle
-        angleChanger.set(speed);
+    public int convertDriverAngleToPotAngle(int driverAngle) {
+        if (driverAngle >= -potMechanicalOffset && driverAngle <= 0)
+        {
+            return Math.abs(potMechanicalOffset - Math.abs(driverAngle));
+        } else if (driverAngle > 0 && driverAngle <= 90){
+            return potMechanicalOffset + Math.abs(driverAngle);
+        }
+        return 0;
     }
 
-    public void setShooterWheels(double value){
-        shooterJaguar.set(value);
+    public int convertPotAngleToDriverAngle(int potAngle) {
+        if (potAngle >= 0 && potAngle <= 90)
+        {
+            return (-1) * potAngle;
+        } else if (potAngle >= 90 && potAngle <= 180)
+        {
+            return potAngle - potMechanicalOffset;
+        }
+        return 0;
     }
 
-    public long checkAnglePotentiometer() {//checks potentiometer of the hood which can get the angle of the hood
-        long value = potentialAngle.getAccumulatorValue();
+     public long checkAnglePotentiometer() {//checks potentiometer of the hood which can get the angle of the hood
+        long value = 0;
+        // value = hoodAnglePot.getAccumulatorValue();
         //getAccumulatorValue(); returns how far the potentiometer is turned at the given call to it.
-        //getAccumulatorCount(); returns a total count since the robot was turned on.  
-        return value;
-    }
-    public long checkRotaterPotentiometer() {//checks potentiometer of the turret which gets angle of rotation
-        long value = potentialRotater.getAccumulatorValue();
-        return value;
-    }
-    public int checkEncoder(){//gets encoder value at given moment
-        int value = encoder.get();
+        //getAccumulatorCount(); returns a total count since the robot was turned on.
         return value;
     }
 
-    public boolean checkLimit() {//checks if limit switch is pressed 
-        return limSwitch.get();
+    public long checkRotaterPotentiometer() {//checks potentiometer of the turret which gets angle of rotation
+        long value = 0;
+        value = turretRotationPot.getAccumulatorValue();
+        return value;
     }
+
+    public void setTurretToZero() {
+        this.rotateTurretToAngle(0);
+    }
+
+    /*********************** SHOOTER SUBSYSTEM METHODS *********************** */
+
+    // spins up the shooter to a minimum level
+    public void spinUpToMinimum() {
+        shooterMotors.set(0.2);
+    }
+
+    // daisy code has power set to neg power....
+    public void spinUpToPowerLevel(double power) {
+        shooterMotors.set(power);
+    }
+
+    // spins down the shooter
+    public void spinDown() {//stops shooting wheels
+        shooterMotors.set(0.0);
+    }
+
+//    public int checkEncoder() {//gets encoder value at given moment
+//        int value = 0;
+//        //value = encoder.get();
+//        return value;
+//    }
+
+    /*********************** HOOD SUBSYSTEM METHODS *********************** */
+
+    //changes hood angle
+    public void changeAngle(double speed) {
+        hoodAngleMotor.set(speed);
+    }
+
+//    //checks if limit switch is pressed
+//    public boolean checkLimit() {
+//        return hoodSafetyLimitSwitch.get();
+//    }
 }
