@@ -15,7 +15,16 @@ public class OI {
     private Joystick attack3;
     private Joystick attack32;
 
-    public OI() {
+    private static OI instance = null;
+
+    public static OI getInstance()
+    {
+        if( instance == null )
+            instance = new OI();
+        return instance;
+    }
+
+    private OI() {
 
         madcatz = new MadCatzControl(MADCATZ_PORT);    //Definition
         attack3 = new Joystick(ATTACK3_PORT);

@@ -20,17 +20,29 @@ import team3929.templates.RobotMap;
 /**
  *
  * @author Carter
+ * @version 2012-03-02-1756 bhgray
  */
 public class Chassis extends Subsystem {
 
-    DriveTrain drive = new DriveTrain(RobotMap.DPWM_driveJag1, RobotMap.DPWM_driveJag2, RobotMap.DPWM_driveJag3, RobotMap.DPWM_driveJag4);//instantiate RobotDrive on ports 1,2,3,4 for left and right motors
-    Encoder leftEncoder = new Encoder(RobotMap.DIO_driveEncoder1Channel1, RobotMap.DIO_driveEncoder1Channel2, false);
-    Encoder rightEncoder = new Encoder(RobotMap.DIO_driveEncoder2Channel1, RobotMap.DIO_driveEncoder2Channel2, false);
-    //create the left and right corresponding encoders that are counting rotations 
+    DriveTrain drive;
+    Encoder leftEncoder;
+    Encoder rightEncoder;
     boolean isLocked;
 
-    public Chassis() {
+    public static Chassis instance = null;
+
+    public static Chassis getInstance() {
+        if (instance == null) {
+            instance = new Chassis();
+        }
+        return instance;
+    }
+
+    private Chassis() {
         isLocked = false;
+        drive = new DriveTrain(RobotMap.DPWM_driveJag1, RobotMap.DPWM_driveJag2, RobotMap.DPWM_driveJag3, RobotMap.DPWM_driveJag4);//instantiate RobotDrive on ports 1,2,3,4 for left and right motors
+        leftEncoder = new Encoder(RobotMap.DIO_driveEncoder1Channel1, RobotMap.DIO_driveEncoder1Channel2, false);
+        rightEncoder = new Encoder(RobotMap.DIO_driveEncoder2Channel1, RobotMap.DIO_driveEncoder2Channel2, false);
     }
 
     public void initDefaultCommand() {
@@ -53,15 +65,14 @@ public class Chassis extends Subsystem {
         isLocked = false;
     }
 
-    public void driveWithJoystick(double stickLeft, double stickRight) {//a method the drives with joystick given to doubles
+    public void driveWithJoystick(double stickLeft, double stickRight) {
         if (!isLocked) {
             drive.tankDrive(stickRight, stickLeft);
         }
     }
 
     public void lock() {
-        
+        isLocked = true;
         drive.tankDrive(0, 0);
-        
     }
 }
