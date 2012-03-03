@@ -27,8 +27,11 @@ public class ManualShooterControl extends CommandBase {
     protected void execute() {
         //rotate shooter based on the axes of the attack3 controller
         
-            shooter.rotateTurretToAngle((int) (oi.getAttackX() / 2 + 1 * 2.5));
-            shooter.spinUpToPowerLevel(oi.getAttackY() / 2);
+
+            
+            shooter.rotateTurretToAngleByJoystick((oi.getAttackX() / 2 ));
+            shooter.spinUpToPowerLevel(-oi.getAttackY() / 2);
+
             if (oi.checkAttackButton(3)) {
                 shooter.changeAngle(.5);
             }
