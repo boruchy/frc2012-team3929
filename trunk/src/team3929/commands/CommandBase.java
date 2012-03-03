@@ -22,7 +22,7 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     public static Chassis chassis = new Chassis();
     public static ArmControl armControl = new ArmControl();
-    public static Shooter shooter = new Shooter();
+    public static Shooter shooter = Shooter.getInstance();
     public static BallIntake ballIntake = new BallIntake();
     // Create a single static instance of all of your subsystems
 

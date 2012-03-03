@@ -4,9 +4,6 @@
  */
 package team3929.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
-import team3929.commands.CommandBase;
-
 /**
  *
  * @author Carter
@@ -30,8 +27,8 @@ public class AutoAimShooterControl extends CommandBase {
     protected void execute() {
         //rotate shooter based on the axes of the attack3 controller
 
-            shooter.rotateTurret(oi.getAttackX() / 2);
-            shooter.setShooterWheels(oi.getAttackY() / 2);
+            shooter.rotateTurretToAngleByJoystick(oi.getAttackX() / 2);
+            shooter.spinUpToPowerLevel(oi.getAttackY() / 2);
             if (oi.checkAttackButton(3)) {
                 shooter.changeAngle(.5);
             }

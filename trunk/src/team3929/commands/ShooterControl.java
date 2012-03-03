@@ -5,7 +5,6 @@
 package team3929.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
-import team3929.commands.CommandBase;
 
 /**
  *
@@ -25,12 +24,13 @@ public class ShooterControl extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        shooter.rotateTurret(oi.getAttackX());
-        shooter.changeAngle(oi.getAttackY());
+        // TODO:  need to convert attackX [-1..1] to angle
+        shooter.rotateTurretToAngle((int) (oi.getAttackX() + 1 * 2.5));
+        shooter.spinUpToPowerLevel(oi.getAttackY());
         if (oi.checkAttackRealButton(Joystick.ButtonType.kTop) == true) {
-            shooter.setShooterWheels(.5);
+            shooter.spinUpToPowerLevel(0.5);
         } else if (oi.checkAttackRealButton(Joystick.ButtonType.kTrigger) == true) {
-            shooter.setShooterWheels(0);
+            shooter.spinDown();
         }
     }
 
