@@ -21,6 +21,9 @@ import team3929.templates.RobotMap;
  */
 public class Shooter extends Subsystem {
 
+    private static final double SHOOTER_MOTOR_STARTUP_POWER = 0.2;
+    private static final double SHOOTER_MOTOR_SPINDOWN_POWER = 0.0;
+
     /***********************  SHOOTER SUBSYSTEM *********************** */
     // the shooter has two Jags being controlled off one PWM
     // therefore this Jaguar acutally represents both
@@ -33,8 +36,8 @@ public class Shooter extends Subsystem {
     // TODO:  is this necessary?  there might be mechanical stops at this point.
     //DigitalInput hoodSafetyLimitSwitch;
     Victor hoodAngleMotor;
-    // POT IS NOT CURRENTLY INSTALLED ON HOOD
-    // AnalogChannel hoodAnglePot;
+    AnalogChannel hoodAnglePot;
+    PIDController hoodAngleController;
 
     /***********************  TURRET SUBSYSTEM *********************** */
     AnalogChannel turretRotationPot;
@@ -52,7 +55,8 @@ public class Shooter extends Subsystem {
         shooterMotors = new Jaguar(RobotMap.DPWM_shooterJag3);
         // hoodSafetyLimitSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);
         //encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
-        // hoodAnglePot = new AnalogChannel(RobotMap.A_Potential1);
+        hoodAnglePot = new AnalogChannel(RobotMap.A_Potential1);
+        hoodAngleController = new PIDController(0.1, 0.001, 0.0, hoodAnglePot, hoodAngleMotor);
         turretRotationPot = new AnalogChannel(RobotMap.A_Potential2);
         turretRotationController = new PIDController(0.1, 0.001, 0.0, turretRotationPot, turretRotationMotor);
     }
@@ -100,6 +104,7 @@ public class Shooter extends Subsystem {
     }
 
     // Joystick is [-1..1]
+    // TODO:  calibrate turret to joystick on manual
     public void rotateTurretToAngleByJoystick(double d) {
         this.rotateTurretToAngle((int)(d + 1 * 2.5));
     }
@@ -124,19 +129,22 @@ public class Shooter extends Subsystem {
 
     /*********************** SHOOTER SUBSYSTEM METHODS *********************** */
 
+    /* The shooter doesn't have an encoder on it currently, so all RPM control
+     * is done using an estimate of power level.
+     */
+
     // spins up the shooter to a minimum level
     public void spinUpToMinimum() {
-        shooterMotors.set(0.2);
+        shooterMotors.set(SHOOTER_MOTOR_STARTUP_POWER);
     }
 
-    // daisy code has power set to neg power....
     public void spinUpToPowerLevel(double power) {
         shooterMotors.set(power);
     }
 
     // spins down the shooter
     public void spinDown() {//stops shooting wheels
-        shooterMotors.set(0.0);
+        shooterMotors.set(SHOOTER_MOTOR_SPINDOWN_POWER);
     }
 
 //    public int checkEncoder() {//gets encoder value at given moment
@@ -148,9 +156,10 @@ public class Shooter extends Subsystem {
     /*********************** HOOD SUBSYSTEM METHODS *********************** */
 
     //changes hood angle
-    public void changeAngle(double speed) {
-        hoodAngleMotor.set(speed);
+    public void changeAngle(double angle) {
+        hoodAngleController.setSetpoint(angle);
     }
+    
 //    //checks if limit switch is pressed
 //    public boolean checkLimit() {
 //        return hoodSafetyLimitSwitch.get();

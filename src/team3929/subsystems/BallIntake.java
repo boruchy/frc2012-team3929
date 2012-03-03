@@ -18,11 +18,31 @@ public class BallIntake extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
-    Victor verticalConveyor = new Victor(RobotMap.DPWM_ballInVictor1); //New victor for the front of the conveyor belt and sets the Victor the corresponding port on RobotMap
-    Victor backConveyor = new Victor(RobotMap.DPWM_ballInVictor2); //New victor for the back of the Conveyor belt
-    AnalogChannel enterSensor = new AnalogChannel(RobotMap.A_ballDetLightSensor1); //new light sensor on entrance to count how many balls are in
-    AnalogChannel shooterSensor = new AnalogChannel(RobotMap.A_ballDetLightSensor2); //new light sensor on the shooter to count how many balls are shot and subtract it from the total balls entered
-    public int ballCounter = 0; //New int ballCounter counts for the number of balls in the robot
+    Victor verticalConveyor;
+    Victor backConveyor;
+    AnalogChannel enterSensor;
+    AnalogChannel shooterSensor;
+    public int ballCounter; //New int ballCounter counts for the number of balls in the robot
+
+    public static BallIntake instance = null;
+
+    public static BallIntake getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new BallIntake();
+        }
+        return instance;
+    }
+
+    private BallIntake()
+    {
+        verticalConveyor = new Victor(RobotMap.DPWM_ballInVictor1); //New victor for the front of the conveyor belt and sets the Victor the corresponding port on RobotMap
+        backConveyor = new Victor(RobotMap.DPWM_ballInVictor2); //New victor for the back of the Conveyor belt
+        enterSensor = new AnalogChannel(RobotMap.A_ballDetLightSensor1); //new light sensor on entrance to count how many balls are in
+        shooterSensor = new AnalogChannel(RobotMap.A_ballDetLightSensor2); //new light sensor on the shooter to count how many balls are shot and subtract it from the total balls entered
+        ballCounter = 0; //New int ballCounter counts for the number of balls in the robot
+    }
 
     public void initDefaultCommand() {
         // Set the default command to CheckBalls
@@ -46,15 +66,12 @@ public class BallIntake extends Subsystem {
         backConveyor.set(0.0);
     }
 
-    public void checkEnterLightSensor() { 
-
-
+    public void checkEnterLightSensor() {
+        
         if (enterSensor.getValue() <= 550) { //If the light sensor sees values less that 350 then there is a ball
-            ballCounter++;
-           
+            ballCounter++;    
         }
         else{
-        
         }
     }
 

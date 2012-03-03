@@ -19,25 +19,37 @@ import team3929.templates.RobotMap;
  * @author Bruce-laptop
  */
 public class ArmControl extends Subsystem {
-Relay RSpike; //New Relay called Rspike
+Relay rsSpike; //New Relay called Rspike
 
-    public ArmControl() {
-        RSpike = new Relay(RobotMap.DRelay_armSpike); //Sets the location for the Relay at the given point on RobotMap so that there are no numbers in the actual code
+    public static ArmControl instance = null;
+
+    public static ArmControl getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new ArmControl();
+        }
+
+        return instance;
+    }
+    
+    private ArmControl() {
+        rsSpike = new Relay(RobotMap.DRelay_armSpike); //Sets the location for the Relay at the given point on RobotMap so that there are no numbers in the actual code
     }
 
    public void On (){
-       RSpike.set(Relay.Value.kOn); //Creates a method called On that sets the Spike to on state
+       rsSpike.set(Relay.Value.kOn); //Creates a method called On that sets the Spike to on state
    }
 
    public void Off(){
-       RSpike.set(Relay.Value.kOff); // Creates a method called Off that sets the relayb state to off
+       rsSpike.set(Relay.Value.kOff); // Creates a method called Off that sets the relayb state to off
 
    }
    public void Reverse(){
-       RSpike.set(Relay.Value.kReverse); //Creates a method that sets the spike into reverse so the motor can move in reverse
+       rsSpike.set(Relay.Value.kReverse); //Creates a method that sets the spike into reverse so the motor can move in reverse
    }
    public void Forward(){
-       RSpike.set(Relay.Value.kForward);//Creates a method that sets the spike forward so the motor can move forward
+       rsSpike.set(Relay.Value.kForward);//Creates a method that sets the spike forward so the motor can move forward
    }
   
 
