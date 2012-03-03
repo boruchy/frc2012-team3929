@@ -33,14 +33,14 @@ public class BallIntake extends Subsystem {
         backConveyor.set(.20);
     }
     public void turnOnVerticalConveyor(){
-        verticalConveyor.set(-.2);
+        verticalConveyor.set(.2);
     }
     public void turnOffVerticalConveyor(){
         verticalConveyor.set(0);
     }
 
     public void reverseHorizontalConveyor() { //New method that turns off both conveyor belts
-        backConveyor.set(-.20);
+        backConveyor.set(-.25);
     }
     public void turnOffHorizontalConveyor(){
         backConveyor.set(0.0);

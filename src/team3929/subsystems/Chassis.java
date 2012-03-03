@@ -55,7 +55,7 @@ public class Chassis extends Subsystem {
 
     public void driveWithJoystick(double stickLeft, double stickRight) {//a method the drives with joystick given to doubles
         if (!isLocked) {
-            drive.tankDrive(stickLeft, stickRight);
+            drive.tankDrive(stickRight, stickLeft);
         }
     }
 
