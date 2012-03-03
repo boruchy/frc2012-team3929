@@ -30,7 +30,7 @@ public class ManualShooterControl extends CommandBase {
 
             
             shooter.rotateTurretToAngleByJoystick((oi.getAttackX() / 2 ));
-            shooter.spinUpToPowerLevel(-oi.getAttackY() / 2);
+            shooter.spinUpToPowerLevel(-oi.getAttackY() );
 
             if (oi.checkAttackButton(3)) {
                 shooter.changeAngle(.5);
