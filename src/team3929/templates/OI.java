@@ -1,9 +1,7 @@
 package team3929.templates;
 
-import team3929.commands.DriveCommands.DriveInASquare;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import team3929.templates.MadCatzControl;
 
 public class OI {

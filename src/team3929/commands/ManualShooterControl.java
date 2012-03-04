@@ -9,9 +9,7 @@ package team3929.commands;
  * @author Carter
  */
 public class ManualShooterControl extends CommandBase {
-
-    
-
+double power;
     public ManualShooterControl() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -20,28 +18,32 @@ public class ManualShooterControl extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-       
+        power = .1;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         //rotate shooter based on the axes of the attack3 controller
         
+        shooter.rotateTurretToAngleByJoystick((oi.getAttackX() / 2));
+        //shooter.spinUpToPowerLevel(-oi.getAttackY());
+        
+        if(oi.checkAttackButton(11)){
+            power+=.1;
+        }
+        else if(oi.checkAttackButton(10)){
+            power-=.1;
+        }
+        if (oi.checkAttackButton(3)) {
+            shooter.changeAngle(.5);
+        } else if (oi.checkAttackButton(4)) {
+            shooter.changeAngle(0);
+        }
+       shooter.spinUpToPowerLevel(-power);
+       System.out.println(power);
 
-            
-            shooter.rotateTurretToAngleByJoystick((oi.getAttackX() / 2 ));
-            shooter.spinUpToPowerLevel(-oi.getAttackY() );
+    }
 
-            if (oi.checkAttackButton(3)) {
-                shooter.changeAngle(.5);
-            }
-            else if (oi.checkAttackButton(4)){
-             shooter.changeAngle(0);
-            }
-            
-        } 
-
-    
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         return false;

@@ -20,10 +20,10 @@ import team3929.templates.RobotMap;
 public abstract class CommandBase extends Command {
 
     public static OI oi;
-    public static Chassis chassis;
-    public static ArmControl armControl;
-    public static Shooter shooter;
-    public static BallIntake ballIntake;
+    public static Chassis chassis = new Chassis();
+    public static ArmControl armControl = new ArmControl();
+    public static Shooter shooter = new Shooter();
+    public static BallIntake ballIntake = new BallIntake();
     // Create a single static instance of all of your subsystems
 
 
@@ -34,10 +34,6 @@ public abstract class CommandBase extends Command {
         // yet. Thus, their requires() statements may grab null pointers. Bad
         // news. Don't move it.
         oi = new OI();
-        chassis = new Chassis();
-        armControl = new ArmControl();
-        shooter = new Shooter();
-        ballIntake = new BallIntake();
 
         // Show what command your subsystem is running on the SmartDashboard
         SmartDashboard.putData(chassis);

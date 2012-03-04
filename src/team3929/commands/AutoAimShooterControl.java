@@ -4,6 +4,8 @@
  */
 package team3929.commands;
 
+import team3929.subsystems.Vision;
+
 /**
  *
  * @author Carter
@@ -11,33 +13,35 @@ package team3929.commands;
 public class AutoAimShooterControl extends CommandBase {
 
     public boolean isManual;
+    private boolean onTarget;    
+    private Vision vision = null;
 
     public AutoAimShooterControl() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(shooter);
+        requires(ballIntake);
+        vision = Vision.getInstance();
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        //rotate shooter based on the axes of the attack3 controller
-
-            shooter.rotateTurretToAngleByJoystick(oi.getAttackX() / 2);
-            shooter.spinUpToPowerLevel(oi.getAttackY() / 2);
-            if (oi.checkAttackButton(3)) {
-                shooter.changeAngle(.5);
+        if (vision.seesTarget()) {
+            shooter.spinUpToPowerLevel(vision.getTargetRPMs());
+            shooter.rotateTurretToAngle((int)vision.getAzimuth());
+            // TODO:  DO WE NEED TO PUT A WAIT HERE AND THEN A STATUS LIGHT
+            // TO TELL THE DRIVER THAT THE BOT IS READY TO FIRE?
+            // DRIVER HOLDS DOWN BUTTON UNTIL BALL FIRED
+             if (oi.checkAttackButton(8) == true) { 
+                ballIntake.turnOnVerticalConveyor();
             }
-            else if (oi.checkAttackButton(4)){
-             shooter.changeAngle(0);
-            }
-
         }
 
+    }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
