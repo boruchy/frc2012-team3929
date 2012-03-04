@@ -20,20 +20,8 @@ import team3929.templates.RobotMap;
  */
 public class ArmControl extends Subsystem {
 Relay rsSpike; //New Relay called Rspike
-
-    public static ArmControl instance = null;
-
-    public static ArmControl getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new ArmControl();
-        }
-
-        return instance;
-    }
     
-    private ArmControl() {
+    public ArmControl() {
         rsSpike = new Relay(RobotMap.DRelay_armSpike); //Sets the location for the Relay at the given point on RobotMap so that there are no numbers in the actual code
     }
 

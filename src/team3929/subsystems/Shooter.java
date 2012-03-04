@@ -47,9 +47,8 @@ public class Shooter extends Subsystem {
     // driving coordinate system will be 0 straight ahead, -90 for LEFT;
     // +90 for RIGHT
     int potMechanicalOffset = 90;
-    public static Shooter instance = null;
 
-    private Shooter() {
+    public Shooter() {
         turretRotationMotor = new Victor(RobotMap.DPWM_shooterVic1);
         hoodAngleMotor = new Victor(RobotMap.DPWM_shooterVic2);
         shooterMotors = new Jaguar(RobotMap.DPWM_shooterJag3);
@@ -59,13 +58,6 @@ public class Shooter extends Subsystem {
         hoodAngleController = new PIDController(0.1, 0.001, 0.0, hoodAnglePot, hoodAngleMotor);
         turretRotationPot = new AnalogChannel(RobotMap.A_Potential2);
         turretRotationController = new PIDController(0.1, 0.001, 0.0, turretRotationPot, turretRotationMotor);
-    }
-
-    public static Shooter getInstance() {
-        if (instance == null) {
-            instance = new Shooter();
-        }
-        return instance;
     }
 
     public void initDefaultCommand() {

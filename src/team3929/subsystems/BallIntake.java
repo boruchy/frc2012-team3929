@@ -24,18 +24,7 @@ public class BallIntake extends Subsystem {
     AnalogChannel shooterSensor;
     public int ballCounter; //New int ballCounter counts for the number of balls in the robot
 
-    public static BallIntake instance = null;
-
-    public static BallIntake getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new BallIntake();
-        }
-        return instance;
-    }
-
-    private BallIntake()
+   public BallIntake()
     {
         verticalConveyor = new Victor(RobotMap.DPWM_ballInVictor1); //New victor for the front of the conveyor belt and sets the Victor the corresponding port on RobotMap
         backConveyor = new Victor(RobotMap.DPWM_ballInVictor2); //New victor for the back of the Conveyor belt
