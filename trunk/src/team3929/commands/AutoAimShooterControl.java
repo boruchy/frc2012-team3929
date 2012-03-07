@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package team3929.commands;
 
 import team3929.subsystems.Vision;
@@ -32,11 +28,20 @@ public class AutoAimShooterControl extends CommandBase {
     protected void execute() {
         if (vision.seesTarget()) {
             shooter.spinUpToPowerLevel(vision.getTargetRPMs());
-            shooter.rotateTurretToAngle((int)vision.getAzimuth());
+
+            if(!shooter.turretIsLocked())
+            {
+                shooter.rotateTurretToAngle((int)vision.getAzimuth());
+            } else
+            {
+                // we need to signal the drivetrain to get into position
+                
+                
+            }
             // TODO:  DO WE NEED TO PUT A WAIT HERE AND THEN A STATUS LIGHT
             // TO TELL THE DRIVER THAT THE BOT IS READY TO FIRE?
             // DRIVER HOLDS DOWN BUTTON UNTIL BALL FIRED
-             if (oi.checkAttackButton(8) == true) { 
+             if (oi.checkAttackButton(1) == true) {
                 ballIntake.turnOnVerticalConveyor();
             }
         }
