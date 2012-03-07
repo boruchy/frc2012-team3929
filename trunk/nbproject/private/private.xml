@@ -6,12 +6,4 @@
             <line>33</line>
         </file>
     </editor-bookmarks>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/C:/Users/Carter/Desktop/FRC/Netbeans/LarryByrd/src/team3929/templates/LarryByrd.java</file>
-        <file>file:/C:/Users/Carter/Desktop/FRC/Netbeans/LarryByrd/src/team3929/commands/DriveCommands/LockDrivetrain.java</file>
-        <file>file:/C:/Users/Carter/Desktop/FRC/Netbeans/LarryByrd/src/team3929/subsystems/Chassis.java</file>
-        <file>file:/C:/Users/Carter/Desktop/FRC/Netbeans/LarryByrd/src/team3929/commands/DriveCommands/UnlockDriveTrain.java</file>
-        <file>file:/C:/Users/Carter/Desktop/FRC/Netbeans/LarryByrd/src/team3929/commands/CheckBalls.java</file>
-        <file>file:/C:/Users/Carter/Desktop/FRC/Netbeans/LarryByrd/src/team3929/subsystems/BallIntake.java</file>
-    </open-files>
 </project-private>

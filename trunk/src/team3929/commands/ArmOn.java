@@ -27,8 +27,16 @@ int a;
             
     }
     protected void execute() {
+        if(oi.checkButton(RobotMap.MC_B)){
+            armControl.Forward();
+        }
+ else if(!oi.checkButton(RobotMap.MC_X)&& !oi.checkButton(RobotMap.MC_B)){
+     armControl.Off();
+ }
+        else if(oi.checkButton(RobotMap.MC_X)){
+            armControl.Reverse();
+        }
         
-        //armControl.fall(); //executes the fall method in armControl
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

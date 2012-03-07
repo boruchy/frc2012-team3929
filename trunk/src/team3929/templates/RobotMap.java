@@ -74,7 +74,7 @@ public class RobotMap {
     //Digital relays have 1 Spike devoted to the arm, and 2 Spikes devoted to
     //the shooter
 
-    public static final int DRelay_armSpike = 1;
+    public static final int DRelay_armSpike = 10;
 
     public static final int DRelay_shooterSpike1 = 2;
     public static final int DRelay_shooterSpike2 = 3;
