@@ -4,6 +4,7 @@
  */
 package team3929.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3929.commands.CommandBase;
@@ -27,15 +28,18 @@ public class CheckBalls extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (oi.checkAttackButton(8) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
+        if (oi.checkAttackRealButton(Joystick.ButtonType.kTrigger)) { //Method from the oi class that checks if the button is pressed and if it is pressed
             ballIntake.turnOnVerticalConveyor();//then uses the turnOnConveyorBelts method from ballIntake
-        } else if (oi.checkAttackButton(9)) {
+        } else if (!oi.checkAttackRealButton(Joystick.ButtonType.kTrigger)) {
             ballIntake.turnOffVerticalConveyor();
-        } else if (oi.checkButton(RobotMap.MC_RB) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
+        }
+        if (oi.checkButton(RobotMap.MC_RB)) { //Method from the oi class that checks if the button is pressed and if it is pressed
             ballIntake.reverseHorizontalConveyor();//then turn off the conveyor belts
-        } else if (oi.checkButton(RobotMap.MC_LB) == true) { //Method from the oi class that checks if the button is pressed and if it is pressed
+        }
+        else if (!oi.checkButton(RobotMap.MC_LB) && !oi.checkButton(RobotMap.MC_RB)) { //Method from the oi class that checks if the button is pressed and if it is pressed
             ballIntake.turnOffHorizontalConveyor();//then turn off the conveyor belts
-        } else if (oi.checkButton(RobotMap.MC_Y) == true) {
+        }
+    else if (oi.checkButton(RobotMap.MC_LB)) {
             ballIntake.turnOnHorizontalConveyor();
         }
         /*if(oi.checkAttackRealButton(ButtonType.kTrigger)){
