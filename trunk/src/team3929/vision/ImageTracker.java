@@ -5,7 +5,7 @@
          
 package team3929.vision;
 
-import com.sun.squawk.util.MathUtils;
+//import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
@@ -198,8 +198,8 @@ public class ImageTracker {
             double scalingA = -1 / 50.0;    //1 foot per 42 pixels
             double yVal = y;                //Y pixel value
             double scalingB = 1.1;
-            double range = distance;        //
-            double theta = cameraAngle + MathUtils.asin(scalingA * (yVal - RobotMap.cameraHeight / 2.0) / range);
+            double range = distance;
+            double theta = cameraAngle + Math.asin(scalingA * (yVal - RobotMap.cameraHeight / 2.0) / range);
             return range * Math.sin(theta) + RobotMap.cameraOnTurretHeight;
         }
         private final double cameraHalfTanAngle = Math.tan(48.0 * Math.PI / 360.0);
