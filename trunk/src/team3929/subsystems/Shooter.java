@@ -68,6 +68,12 @@ public class Shooter extends Subsystem {
     /*********************** TURRET SUBSYSTEM METHODS *********************** */
     // mechanical angle on the pot is 0 (90 degrees LEFT) to 180 (90 degrees RIGHT)
     // input is in the drivetrain coordinate system (0 is straight ahead)
+
+    public boolean turretIsLocked()
+    {
+        return false;
+    }
+
     public void rotateTurretToAngle(int angle) {
         turretRotationController.setSetpoint(convertDriverAngleToPotAngle(angle));
     }
