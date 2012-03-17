@@ -4,6 +4,7 @@
 package team3929.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Timer;
 import team3929.commands.ManualShooterControl;
 import team3929.templates.RobotMap;
+import team3929.utilities.MovingAverageFilter;
 
 /**
  *
@@ -28,6 +30,9 @@ public class Shooter extends Subsystem {
     // the shooter has two Jags being controlled off one PWM
     // therefore this Jaguar acutally represents both
     Jaguar shooterMotors;
+    Counter rpmCounter;
+    MovingAverageFilter filter;
+    
     // RPM encoder for the shooter -- NOT INCLUDED ON THE BOT CURRENTLY
     //Encoder encoder;
     /***********************  HOOD SUBSYSTEM *********************** */
@@ -52,6 +57,8 @@ public class Shooter extends Subsystem {
         turretRotationMotor = new Victor(RobotMap.DPWM_shooterVic1);
         hoodAngleMotor = new Victor(RobotMap.DPWM_shooterVic2);
         shooterMotors = new Jaguar(RobotMap.DPWM_shooterJag3);
+        // TODO:  instantiate the counter using RobotMap
+        // TODO:  instantiate the filter
         // hoodSafetyLimitSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);
         //encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
         hoodAnglePot = new AnalogChannel(RobotMap.A_Potential1);
@@ -66,6 +73,12 @@ public class Shooter extends Subsystem {
     }
 
     /*********************** TURRET SUBSYSTEM METHODS *********************** */
+
+    public boolean turretIsLocked()
+    {
+        return false;
+    }
+    
     // mechanical angle on the pot is 0 (90 degrees LEFT) to 180 (90 degrees RIGHT)
     // input is in the drivetrain coordinate system (0 is straight ahead)
     public void rotateTurretToAngle(int angle) {
@@ -126,6 +139,11 @@ public class Shooter extends Subsystem {
     // spins up the shooter to a minimum level
     public void spinUpToMinimum() {
         shooterMotors.set(SHOOTER_MOTOR_STARTUP_POWER);
+    }
+
+    public int rpm()
+    {
+        return filter.getAverage();
     }
 
     public void spinUpToPowerLevel(double power) {

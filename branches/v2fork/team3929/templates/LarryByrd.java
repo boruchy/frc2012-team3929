@@ -21,7 +21,6 @@ import team3929.commands.DriveCommands.LockDrivetrain;
 import team3929.commands.DriveCommands.Turn;
 import team3929.commands.DriveCommands.UnlockDriveTrain;
 import team3929.commands.ManualShooterControl;
-import team3929.ShooterTestCommands.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -50,17 +49,6 @@ public class LarryByrd extends IterativeRobot {
         autoChooser.addObject("Lock drivetrain", new LockDrivetrain());
         autoChooser.addObject("Unlock drivetrain", new UnlockDriveTrain());
         autoChooser.addDefault("Drive With Joystick", new DriveWithJoystick());
-        shooterTester.addDefault("Manual", new ManualShooterControl());
-        shooterTester.addObject(".1", new Speed1());
-        shooterTester.addObject(".2", new Speed2());
-        shooterTester.addObject(".3", new Speed3());
-        shooterTester.addObject(".4", new Speed4());
-        shooterTester.addObject(".5", new Speed5());
-        shooterTester.addObject(".6", new Speed6());
-        shooterTester.addObject(".7", new Speed7());
-        shooterTester.addObject(".8", new Speed8());
-        shooterTester.addObject(".9", new Speed9());
-        shooterTester.addObject(".10", new Speed10());
         SmartDashboard.putData("autoChooser", autoChooser);
         SmartDashboard.putData("Shooter Testing",shooterTester);
         SmartDashboard.putData("Scheduler", Scheduler.getInstance());
