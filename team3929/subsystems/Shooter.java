@@ -30,7 +30,7 @@ public class Shooter extends Subsystem {
     // the shooter has two Jags being controlled off one PWM
     // therefore this Jaguar acutally represents both
     Jaguar shooterMotors;
-    Counter rpmCounter;
+    Encoder encoder;
     MovingAverageFilter filter;
     
     // RPM encoder for the shooter -- NOT INCLUDED ON THE BOT CURRENTLY
@@ -60,7 +60,7 @@ public class Shooter extends Subsystem {
         // TODO:  instantiate the counter using RobotMap
         // TODO:  instantiate the filter
         // hoodSafetyLimitSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);
-        //encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
+        encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
         hoodAnglePot = new AnalogChannel(RobotMap.A_Potential1);
         hoodAngleController = new PIDController(0.1, 0.001, 0.0, hoodAnglePot, hoodAngleMotor);
         turretRotationPot = new AnalogChannel(RobotMap.A_Potential2);

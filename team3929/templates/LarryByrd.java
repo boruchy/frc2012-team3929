@@ -82,7 +82,6 @@ public class LarryByrd extends IterativeRobot {
                 autonomousCommand.start();
                 shooterCommand = (Command) shooterTester.getSelected();
                 shooterCommand.start();
-
     }
 
     /**
@@ -91,7 +90,6 @@ public class LarryByrd extends IterativeRobot {
     public void teleopPeriodic() {
 
                     autonomousCommand = (Command) autoChooser.getSelected();
-       
                     Scheduler.getInstance().run();
                 
         
