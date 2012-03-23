@@ -4,28 +4,28 @@
  */
 package team3929.subsystems;
 
+import edu.wpi.first.smartdashboard.gui.elements.Subsystem;
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
 import team3929.subsystems.MechanismBase;
 import team3929.subsystems.MechanismState;
+import team3929.templates.RobotMap;
 
 /**
  * Drivetrain class. Wraps all drive base related functions.
  * @author Jeremy Germita
  */
-public class DriveTrain extends MechanismBase {
+public class DriveTrain extends Subsystem {
 
-    private static class DRIVETRAIN_STATES {
-        public static MechanismState DRIVING = new MechanismState("DRIVING");                           //Regular open field driving
-        public static MechanismState BUMP_CROSS = new MechanismState("BUMP_CROSS");                     //Bump traversal state
-        public static MechanismState BRIDGE_CROSS = new MechanismState("BRIDGE_CROSS");                 //Bridge crossing state
-        public static MechanismState BRIDGE_BALANCE_ONE = new MechanismState("BRIDGE_BALANCE_ONE");     //one robot bridge balancing state
-        public static MechanismState BRIDGE_BALANCE_MULTI = new MechanismState("BRIDGE_BALANCE_MULTI"); //Multiple robot bridge balancing state
-    }
     private Jaguar m_leftA = null;
     private Jaguar m_leftB = null;
     private Jaguar m_rightA = null;
     private Jaguar m_rightB = null;
+    private Encoder leftEncoder = null;
+    private Encoder rightEncoder = null;
+    private double leftCount;
+    private double rightCount;
 
     /**
      * Constructor
@@ -60,6 +60,10 @@ public class DriveTrain extends MechanismBase {
             System.err.println("[DRIVE-RIGHT-B]Error initializing");
             e.printStackTrace();
         }
+
+        leftEncoder = new Encoder(RobotMap.DIO_driveEncoder1Channel1, RobotMap.DIO_driveEncoder1Channel2, false);
+        rightEncoder = new Encoder(RobotMap.DIO_driveEncoder2Channel1, RobotMap.DIO_driveEncoder2Channel2, false);
+        rightCount = leftCount = 0;
     }
 
     /**
@@ -88,10 +92,35 @@ public class DriveTrain extends MechanismBase {
         }
         try {
             m_rightB.set(rightPower);
-   
+
         } catch (Exception e) {
             System.err.println("[DRIVE-RIGHT-B]Error sending power");
             e.printStackTrace();
         }
+    }
+
+    private int getRightCount() {
+        return rightEncoder.getRaw();
+    }
+
+    private int getLeftCount() {
+        return leftEncoder.getRaw();
+    }
+    
+    private void resetEncoders() {
+        rightEncoder.reset();
+        leftEncoder.reset();
+        leftCount = rightCount = 0;
+    }
+
+    private void startEncoders() {
+        rightEncoder.start();
+        leftEncoder.start();
+        this.resetEncoders();
+    }
+
+    private int leftDrift()
+    {
+        return this.getLeftCount() - this.getRightCount();
     }
 }
