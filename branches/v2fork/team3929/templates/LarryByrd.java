@@ -34,15 +34,15 @@ public class LarryByrd extends IterativeRobot {
     Command autonomousCommand;
     SendableChooser autoChooser;    
     SendableChooser shooterTester;
-     Command shooterCommand;
+    Command shooterCommand;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    @Override
     public void robotInit() {
         // instantiate the command used for the autonomous period
         NetworkTable.initialize();
-
         autoChooser = new SendableChooser();
         autoChooser.addObject("Turn", new Turn(4));
         autoChooser.addObject("Drive Straight", new DriveStraight(4));
@@ -50,12 +50,13 @@ public class LarryByrd extends IterativeRobot {
         autoChooser.addObject("Unlock drivetrain", new UnlockDriveTrain());
         autoChooser.addDefault("Drive With Joystick", new DriveWithJoystick());
         SmartDashboard.putData("autoChooser", autoChooser);
-        SmartDashboard.putData("Shooter Testing",shooterTester);
+        SmartDashboard.putData("Shooter Testi ng",shooterTester);
         SmartDashboard.putData("Scheduler", Scheduler.getInstance());
         
         CommandBase.init();
     }
     
+    @Override
     public void autonomousInit() {
         // schedule the autonomous command (example)
        
@@ -65,6 +66,7 @@ public class LarryByrd extends IterativeRobot {
     /**
      * This function is called periodically during autonomous
      */
+    @Override
     public void autonomousPeriodic() {
         
         Scheduler.getInstance().run();
@@ -87,6 +89,7 @@ public class LarryByrd extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
+    @Override
     public void teleopPeriodic() {
 
                     autonomousCommand = (Command) autoChooser.getSelected();

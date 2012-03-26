@@ -5,11 +5,9 @@
 package team3929.subsystems;
 
 import edu.wpi.first.smartdashboard.gui.elements.Subsystem;
-import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
-import team3929.subsystems.MechanismBase;
-import team3929.subsystems.MechanismState;
 import team3929.templates.RobotMap;
 
 /**
@@ -61,9 +59,17 @@ public class DriveTrain extends Subsystem {
             e.printStackTrace();
         }
 
-        leftEncoder = new Encoder(RobotMap.DIO_driveEncoder1Channel1, RobotMap.DIO_driveEncoder1Channel2, false);
-        rightEncoder = new Encoder(RobotMap.DIO_driveEncoder2Channel1, RobotMap.DIO_driveEncoder2Channel2, false);
-        rightCount = leftCount = 0;
+        // setDistance per pulse = (Wheel Circumference) / (encoder pulses per rotation)
+        /*
+         * our wheel diameter is 6" -> cirumference 6\pi
+         * 10fps at load calculated with the gear box, means 10feet --> 120 inches per second / 6\pi inches = 6.3662 inches 
+         * at k4X, 1440 cycles per revolution (360 pulses per revolution)
+         * 
+         */
+        leftEncoder = new Encoder(RobotMap.DIO_driveEncoder1Channel1, RobotMap.DIO_driveEncoder1Channel2, false, EncodingType.k1X);
+        leftEncoder.setDistancePerPulse(0.0);
+        rightEncoder = new Encoder(RobotMap.DIO_driveEncoder2Channel1, RobotMap.DIO_driveEncoder2Channel2, false, EncodingType.k1X);
+        rightEncoder.setDistancePerPulse(0.0);
     }
 
     /**

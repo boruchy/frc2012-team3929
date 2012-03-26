@@ -1,0 +1,10 @@
+#summary Optional competition thing
+#labels optional
+= Introduction =
+
+Competition thing
+
+
+= Details =
+
+http://hs.spoj.pl/
