@@ -11,20 +11,21 @@ package team3929.utilities;
  */
 public class MovingAverageFilter {
 
-    private int [] data;
+    private double [] data;
     private int currentDataPointIndex;
     private int windowSize;
     private boolean fullSample;
+    private double average;
 
     public MovingAverageFilter(int windowSize)
     {
         this.windowSize = windowSize;
-        data = new int[windowSize];
+        data = new double[windowSize];
         fullSample = false;
         reset();
     }
 
-    public void addPoint(int point)
+    public synchronized void addPoint(double point)
     {
         if (currentDataPointIndex + 1 >= data.length)
         {
@@ -36,7 +37,7 @@ public class MovingAverageFilter {
         data[currentDataPointIndex] = point;
     }
 
-    public void reset()
+    public  synchronized void reset()
     {
         for (int i = 0; i < windowSize; i++)
         {
@@ -45,26 +46,42 @@ public class MovingAverageFilter {
         fullSample = false;
     }
 
-    public int getAverage()
-    {
-        double total = 0.0;
-        int average = 0;
+//    public int getAverage()
+//    {
+//        double total = 0.0;
+//        int average = 0;
+//
+//        if (fullSample)
+//        {
+//           for (int i = 0; i < data.length; i++)
+//            {
+//                total += data[i];
+//            }
+//           average = (int) (total / data.length);
+//        } else
+//        {
+//         for (int i = 0; i <= currentDataPointIndex; i++)
+//            {
+//                total += data[i];
+//            }
+//            average = (int) (total / (double)(currentDataPointIndex));
+//        }
+//        return average;
+//    }
 
-        if (fullSample)
+    public synchronized double getAverage()
+    {
+        return average;
+    }
+
+    public synchronized double run()
+    {
+        average = 0.0;
+        for( int i = 0; i < data.length; i++ )
         {
-           for (int i = 0; i < data.length; i++)
-            {
-                total += data[i];
-            }
-           average = (int) (total / data.length);
-        } else
-        {
-         for (int i = 0; i <= currentDataPointIndex; i++)
-            {
-                total += data[i];
-            }
-            average = (int) (total / (double)(currentDataPointIndex));
+            average += data[i];
         }
+        average /= (double)data.length;
         return average;
     }
 }
