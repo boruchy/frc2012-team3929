@@ -5,16 +5,18 @@ package team3929.subsystems;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Timer;
 import team3929.commands.ManualShooterControl;
 import team3929.templates.RobotMap;
 import team3929.utilities.MovingAverageFilter;
+import team3929.utilities.ShooterSpeedController;
 
 /**
  *
@@ -26,105 +28,96 @@ public class Shooter extends Subsystem {
 
     private static final double SHOOTER_MOTOR_STARTUP_POWER = 0.2;
     private static final double SHOOTER_MOTOR_SPINDOWN_POWER = 0.0;
+
+    private boolean atSpeed = false;
+    private boolean atAngle = false;
+    
     /***********************  SHOOTER SUBSYSTEM *********************** */
     // the shooter has two Jags being controlled off one PWM
     // therefore this Jaguar acutally represents both
-    Jaguar shooterMotors;
-    Encoder encoder;
-    MovingAverageFilter filter;
-    
-    // RPM encoder for the shooter -- NOT INCLUDED ON THE BOT CURRENTLY
-    //Encoder encoder;
-    /***********************  HOOD SUBSYSTEM *********************** */
-    // safety for hood.
-    // TODO:  is this necessary?  there might be mechanical stops at this point.
-    //DigitalInput hoodSafetyLimitSwitch;
-    Victor hoodAngleMotor;
-    AnalogChannel hoodAnglePot;
-    PIDController hoodAngleController;
-    /***********************  TURRET SUBSYSTEM *********************** */
-    AnalogChannel turretRotationPot;
-    Victor turretRotationMotor;
-    PIDController turretRotationController;
-    // mechanical zero on the pot will be set to 90 degrees left
-    // driving coordinate system will be 0 straight ahead, -90 for LEFT;
-    // +90 for RIGHT
-    int potMechanicalOffset = 90;
-    public boolean hoodIsDown;
+    private Jaguar shooterMotors;
+    private Counter rpmEncoder;
+    private PIDController rpmSpeedController;
+    private MovingAverageFilter rpmFilter;
+    public static final int kCountsPerRev = 2;
 
-    public Shooter() {
-        hoodIsDown = true;
-        turretRotationMotor = new Victor(RobotMap.DPWM_shooterVic1);
-        hoodAngleMotor = new Victor(RobotMap.DPWM_shooterVic2);
+
+    /***********************  HOOD SUBSYSTEM *********************** */
+
+    /***********************  TURRET SUBSYSTEM *********************** */
+//    private AnalogChannel turretRotationPot;
+    private Victor turretRotationMotor;
+    private PIDController turretRotationController;
+
+    public Shooter()
+    {
         shooterMotors = new Jaguar(RobotMap.DPWM_shooterJag3);
-        // TODO:  instantiate the counter using RobotMap
-        // TODO:  instantiate the filter
-        // hoodSafetyLimitSwitch = new DigitalInput(RobotMap.DIO_shooterLimSwitch);
-        encoder = new Encoder(RobotMap.DIO_shooterEncoderChannel1, RobotMap.DIO_shooterEncoderChannel2, false);
-        hoodAnglePot = new AnalogChannel(RobotMap.A_Potential1);
-        hoodAngleController = new PIDController(0.1, 0.001, 0.0, hoodAnglePot, hoodAngleMotor);
-        turretRotationPot = new AnalogChannel(RobotMap.A_Potential2);
-        turretRotationController = new PIDController(0.1, 0.001, 0.0, turretRotationPot, turretRotationMotor);
+
+        // at k4X, 1440 cycles per revolution (360 pulses per revolution)  this allows for a max of 10,000 rpm
+        // see specs for details
+        // ChiefDelphi advises to use 1x encoder type to minimize phase errors.
+
+        // now using just a simple counter.
+        rpmEncoder = new Counter(RobotMap.DIO_shooterEncoderChannel1);
+        rpmEncoder.start();
+        rpmFilter = new MovingAverageFilter(6);
+        rpmSpeedController = new ShooterSpeedController(this, shooterMotors);
+        rpmSpeedController.enable();
+
+        
+        // this PIDController will need to be tuned
+        // the PIDSource is the vision system (the azimuth)
+        // the PIDOutput is the motor.
+        
+        turretRotationController = new PIDController(0.1, 0.001, 0.0, Vision.getInstance(), turretRotationMotor);
+        turretRotationController.enable();
     }
 
+    @Override
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new ManualShooterControl());
+        setDefaultCommand(null);
     }
 
     /*********************** TURRET SUBSYSTEM METHODS *********************** */
 
-    public boolean turretIsLocked()
-    {
-        return false;
-    }
-    
+      
     // mechanical angle on the pot is 0 (90 degrees LEFT) to 180 (90 degrees RIGHT)
     // input is in the drivetrain coordinate system (0 is straight ahead)
+
+    /* IF there is a pot on the turrent, we can go directly to an angle by setting
+     * the setpoint to an explicit angle.
+     * ELSE we are simply comparing the current turrent angle against the aiming
+     * line in the ByrdsEye (i.e., the azimuth reading) and trying to get the
+     * difference to 0.
+     */
+
     public void rotateTurretToAngle(int angle) {
-        turretRotationController.setSetpoint(convertDriverAngleToPotAngle(angle));
+       // turretRotationController.setSetpoint(convertDriverAngleToPotAngle(angle));
+        turretRotationController.setSetpoint(angle);
+    }
+
+    public void alignTurretWithTargetingAzimuth()
+    {
+        atAngle = false;
+        turretRotationController.setSetpoint(0);
+        while (!turretRotationController.onTarget())
+        {
+
+        }
+        atAngle = true;
+        System.out.println("On target angle.");
     }
 
     public void rotateTurretByJoy(double speed) {
         turretRotationMotor.set(speed);
     }
 
-    public int convertDriverAngleToPotAngle(int driverAngle) {
-        if (driverAngle >= -potMechanicalOffset && driverAngle <= 0) {
-            return Math.abs(potMechanicalOffset - Math.abs(driverAngle));
-        } else if (driverAngle > 0 && driverAngle <= 90) {
-            return potMechanicalOffset + Math.abs(driverAngle);
-        }
-        return 0;
-    }
-
-    public int convertPotAngleToDriverAngle(int potAngle) {
-        if (potAngle >= 0 && potAngle <= 90) {
-            return (-1) * potAngle;
-        } else if (potAngle >= 90 && potAngle <= 180) {
-            return potAngle - potMechanicalOffset;
-        }
-        return 0;
-    }
 
     // Joystick is [-1..1]
     // TODO:  calibrate turret to joystick on manual
     public void rotateTurretToAngleByJoystick(double d) {
         this.rotateTurretToAngle((int) (d + 1 * 2.5));
-    }
-
-    public long checkAnglePotentiometer() {//checks potentiometer of the hood which can get the angle of the hood
-        long value = 0;
-        // value = hoodAnglePot.getAccumulatorValue();
-        //getAccumulatorValue(); returns how far the potentiometer is turned at the given call to it.
-        //getAccumulatorCount(); returns a total count since the robot was turned on.
-        return value;
-    }
-
-    public long checkRotaterPotentiometer() {//checks potentiometer of the turret which gets angle of rotation
-        long value = 0;
-        value = turretRotationPot.getAccumulatorValue();
-        return value;
     }
 
     public void setTurretToZero() {
@@ -133,21 +126,46 @@ public class Shooter extends Subsystem {
 
     /*********************** SHOOTER SUBSYSTEM METHODS *********************** */
 
-    /* The shooter doesn't have an encoder on it currently, so all RPM control
-     * is done using an estimate of power level.
-     */
-    // spins up the shooter to a minimum level
+    // spins up the shooter to a present minimum level
     public void spinUpToMinimum() {
         shooterMotors.set(SHOOTER_MOTOR_STARTUP_POWER);
     }
 
-    public int rpm()
+    public synchronized void runInputFilters()
     {
-        return filter.getAverage();
+        double rpm = 60.0/(rpmEncoder.getPeriod()*(double)kCountsPerRev);
+        if( rpm < 7500.0 )
+        {
+            // This check ensures that erratic readings are rejected
+            rpmFilter.addPoint(rpm);
+            rpmFilter.run();
+        }
     }
+
+    public double getShooterSpeedRPM()
+    {
+        return rpmFilter.getAverage();
+    }
+
+    /*
+     * this is raw power level.  useful only in the joystick (manual)
+     * context
+     */
 
     public void spinUpToPowerLevel(double power) {
         shooterMotors.set(power);
+    }
+
+    public void spinUpToRPM(double rpm)
+    {
+        atSpeed = false;
+        rpmSpeedController.setSetpoint(rpm);
+        while (!rpmSpeedController.onTarget())
+        {
+        }
+        atSpeed = true;
+        System.out.println("Setpoint: " + this.rpmSpeedController.getSetpoint());
+        System.out.println("At speed: " + this.getShooterSpeedRPM());
     }
 
     // spins down the shooter
@@ -155,31 +173,31 @@ public class Shooter extends Subsystem {
         shooterMotors.set(SHOOTER_MOTOR_SPINDOWN_POWER);
     }
 
-//    public int checkEncoder() {//gets encoder value at given moment
-//        int value = 0;
-//        //value = encoder.get();
-//        return value;
-//    }
     /*********************** HOOD SUBSYSTEM METHODS *********************** */
-    //changes hood angle
-    public void changeAngle(boolean thing) {
-        if (thing) {
-            hoodAngleMotor.set(.2);
-            Timer.delay(5.3);
-            hoodAngleMotor.set(0);
-            hoodIsDown = false;
-        } else if (!thing) {
-            hoodAngleMotor.set(-.11);
-            Timer.delay(1.25);
-            hoodAngleMotor.set(0);
-            hoodIsDown = true;
+
+    public PIDSource getRPMPIDSource() {
+        return new RPMPIDSource();
+    }
+
+    public PIDOutput getRPMPIDOutput() {
+        return new RPMPIDOutput();
+    }
+
+    private class RPMPIDSource implements PIDSource {
+
+        @Override
+        public double pidGet() {
+            return getShooterSpeedRPM();
         }
     }
-    public void changeWithPower(double power){
-        hoodAngleMotor.set(power);
+
+    private class RPMPIDOutput implements PIDOutput {
+
+        @Override
+        public void pidWrite(double output) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+        
     }
-//    //checks if limit switch is pressed
-//    public boolean checkLimit() {
-//        return hoodSafetyLimitSwitch.get();
-//    }
+
 }
