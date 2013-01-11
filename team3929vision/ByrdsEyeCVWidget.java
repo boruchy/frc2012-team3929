@@ -39,7 +39,8 @@ import javax.imageio.ImageIO;
 /**
  *
  * @author jrussell
- * @author
+ * @author bhgray
+ * @author chenderson
  */
 public class ByrdsEyeCVWidget extends WPICameraExtension
 {
